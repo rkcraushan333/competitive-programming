@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "random": "cpp",
+        "bitset": "cpp",
+        "ostream": "cpp",
+        "iostream": "cpp",
+        "*.tcc": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "regex": "cpp",
+        "unordered_set": "cpp",
+        "set": "cpp"
+    }
+}
