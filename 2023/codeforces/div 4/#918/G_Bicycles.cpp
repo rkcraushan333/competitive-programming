@@ -119,7 +119,52 @@ int ncr(int n, int r)
 // by inforkc
 void inforkc()
 {
-    
+    int n, m;
+    cin >> n >> m;
+    vector<vp64> adj(n + 1);
+    forn(i, 0, m)
+    {
+        int a, b, c;
+        cin >> a >> b >> c;
+        adj[a].push_back({b, c});
+        adj[b].push_back({a, c});
+    }
+    v64 bike(n + 1);
+    forn(i, 1, n)
+    {
+        cin >> bike[i];
+    }
+    vector<v64> dis(n + 1, v64(n + 1, 1e18));
+    dis[1][1] = 0;
+    int ans = 1e18;
+    set<vector<int>> st;
+    st.insert({0, 1, 1});
+    while (st.size())
+    {
+        auto x = *st.begin();
+        st.erase(x);
+        int time = x[0];
+        int node = x[1];
+        int bk = x[2];
+        if (node == n)
+        {
+            ans = min(ans, time);
+        }
+        for (auto j : adj[node])
+        {
+            auto child = j.first;
+            auto wt = j.second;
+            if (st.count({dis[child][bk], child, bk}))
+            {
+                st.erase({dis[child][bk], child, bk});
+            }
+            dis[child][bk] = dis[node][bk] + wt * bike[bk];
+            dis[child][child] = min(dis[child][child], dis[child][bk]);
+            st.insert({dis[child][bk], child, bk});
+            st.insert({dis[child][bk], child, child});
+        }
+    }
+    cout << ans << ln;
 }
 signed main()
 {
