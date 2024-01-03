@@ -121,34 +121,6 @@ void inforkc()
 {
     string s;
     cin >> s;
-    int n = s.size();
-    int a = 0, b = 0;
-    forn(i, 0, n)
-    {
-        if (s[i] == '0')
-            a++;
-        else
-            b++;
-    }
-    if (a == 0 || b == 0)
-        cout << n << ln;
-    else if (a == b)
-        cout << 0 << ln;
-    else
-    {
-        for (int i = 0; i < n; i++)
-        {
-            if (s[i] == '0')
-                b--;
-            else
-                a--;
-            if (a == 0 || b == 0)
-            {
-                cout << n - i - 1 << ln;
-                return;
-            }
-        }
-    }
 }
 
 signed main()

@@ -11,8 +11,8 @@ using namespace __gnu_pbds;
 #define pqmin priority_queue<int, vector<int>, greater<int>>
 #define pqmax priority_queue<int>
 #define ln "\n"
-#define yy cout << "YES" << ln
-#define nn cout << "NO" << ln
+#define yy cout << "Yes" << ln
+#define nn cout << "No" << ln
 #define pi 3.14159265358979323846
 const int mod = 1e9 + 7;
 #define dbg cout << "debug" << ln;
@@ -115,48 +115,7 @@ int ncr(int n, int r)
 // by inforkc => don't use hashing in codeforces instead use set and map
 void inforkc()
 {
-    int n;
-    cin >> n;
-    map<int, int> m1, m2;
-    while (n--)
-    {
-        char c;
-        int l, r;
-        cin >> c >> l >> r;
-        if (c == '+')
-        {
-            m1[l]++;
-            m2[r]++;
-            int l1 = m1.rbegin()->first;
-            int r1 = m2.begin()->first;
-            if (l1 > r1)
-                yy;
-            else
-                nn;
-        }
-        else
-        {
-            m1[l]--;
-            m2[r]--;
-            if (m1[l] == 0)
-                m1.erase(l);
-            if (m2[r] == 0)
-                m2.erase(r);
-            if (m1.size() == 0)
-            {
-                nn;
-            }
-            else
-            {
-                int l1 = m1.rbegin()->first;
-                int r1 = m2.begin()->first;
-                if (l1 > r1)
-                    yy;
-                else
-                    nn;
-            }
-        }
-    }
+       
 }
 
 signed main()
@@ -168,7 +127,7 @@ signed main()
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    // cin >> t_e_s_t;
+    cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

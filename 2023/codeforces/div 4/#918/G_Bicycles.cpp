@@ -121,51 +121,67 @@ void inforkc()
 {
     int n, m;
     cin >> n >> m;
-    vector<vp64> adj(n + 1);
+    vector<vp64> adj(n);
     forn(i, 0, m)
     {
-        int a, b, c;
-        cin >> a >> b >> c;
-        adj[a].push_back({b, c});
-        adj[b].push_back({a, c});
+        int u, v, w;
+        cin >> u >> v >> w;
+        u--;
+        v--;
+        adj[u].push_back({v, w});
+        adj[v].push_back({u, w});
     }
-    v64 bike(n + 1);
-    forn(i, 1, n)
+    vector<int> bikes(n);
+    forn(i, 0, n)
     {
-        cin >> bike[i];
+        cin >> bikes[i];
     }
-    vector<v64> dis(n + 1, v64(n + 1, 1e18));
-    dis[1][1] = 0;
-    int ans = 1e18;
-    set<vector<int>> st;
-    st.insert({0, 1, 1});
+
+    // 2-D dis array and 2-D set for dijkstra
+    vector<v64> dis(n, v64(n, 1e18));
+    dis[0][0] = 0;
+
+    set<v64> st;
+    st.insert({0, 0, 0});
     while (st.size())
     {
-        auto x = *st.begin();
-        st.erase(x);
-        int time = x[0];
-        int node = x[1];
-        int bk = x[2];
-        if (node == n)
+        auto t = *st.begin();
+        st.erase(t);
+        int d = t[0], node = t[1], bk = t[2];
+        for (auto x : adj[node])
         {
-            ans = min(ans, time);
-        }
-        for (auto j : adj[node])
-        {
-            auto child = j.first;
-            auto wt = j.second;
-            if (st.count({dis[child][bk], child, bk}))
+            int child = x.first, wt = x.second;
+            if (dis[child][bk] > d + wt * bikes[bk])
             {
-                st.erase({dis[child][bk], child, bk});
+                if (st.count({dis[child][bk], child, bk}))
+                {
+                    st.erase({dis[child][bk], child, bk});
+                }
+
+                dis[child][bk] = d + wt * bikes[bk];
+                st.insert({dis[child][bk], child, bk});
             }
-            dis[child][bk] = dis[node][bk] + wt * bike[bk];
-            dis[child][child] = min(dis[child][child], dis[child][bk]);
-            st.insert({dis[child][bk], child, bk});
-            st.insert({dis[child][bk], child, child});
+
+            if (dis[child][node] > d + bikes[node] * wt)
+            {
+                if (st.count({dis[child][node], child, node}))
+                {
+                    st.erase({dis[child][node], child, node});
+                }
+                dis[child][node] = d + bikes[node] * wt;
+                st.insert({dis[child][node], child, node});
+            }
         }
     }
+    int ans = 1e18;
+    for (int i = 0; i < n; i++)
+    {
+        ans = min(ans, dis[n - 1][i]);
+    }
+
     cout << ans << ln;
 }
+
 signed main()
 {
     ios_base::sync_with_stdio(false);

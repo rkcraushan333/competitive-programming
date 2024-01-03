@@ -128,7 +128,7 @@ void inforkc()
         if (i % 2 == 0)
             v[i] *= -1;
     }
-    us st;
+    set<int> st;
     st.insert(0);
     int curr = 0;
     for (auto i : v)

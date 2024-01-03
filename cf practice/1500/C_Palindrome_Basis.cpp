@@ -11,8 +11,8 @@ using namespace __gnu_pbds;
 #define pqmin priority_queue<int, vector<int>, greater<int>>
 #define pqmax priority_queue<int>
 #define ln "\n"
-#define yy cout << "YES" << ln
-#define nn cout << "NO" << ln
+#define yy cout << "Yes" << ln
+#define nn cout << "No" << ln
 #define pi 3.14159265358979323846
 const int mod = 1e9 + 7;
 #define dbg cout << "debug" << ln;
@@ -113,50 +113,38 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
+v64 pal;
+bool isPal(int n)
+{
+    string s = to_string(n);
+    string t = s;
+    reverse(s.begin(), s.end());
+    return s == t;
+}
+int dp[40001][500];
+int f(int n, int i = 0)
+{
+    if (n == 0)
+        return 1;
+    if (i == pal.size())
+        return 0;
+    if (dp[n][i] != -1)
+        return dp[n][i];
+    int ans = 0;
+    if (n >= pal[i])
+    {
+        ans += f(n - pal[i], i);
+        ans %= mod;
+    }
+    ans += f(n, i + 1);
+    ans %= mod;
+    return dp[n][i] = ans;
+}
 void inforkc()
 {
     int n;
     cin >> n;
-    map<int, int> m1, m2;
-    while (n--)
-    {
-        char c;
-        int l, r;
-        cin >> c >> l >> r;
-        if (c == '+')
-        {
-            m1[l]++;
-            m2[r]++;
-            int l1 = m1.rbegin()->first;
-            int r1 = m2.begin()->first;
-            if (l1 > r1)
-                yy;
-            else
-                nn;
-        }
-        else
-        {
-            m1[l]--;
-            m2[r]--;
-            if (m1[l] == 0)
-                m1.erase(l);
-            if (m2[r] == 0)
-                m2.erase(r);
-            if (m1.size() == 0)
-            {
-                nn;
-            }
-            else
-            {
-                int l1 = m1.rbegin()->first;
-                int r1 = m2.begin()->first;
-                if (l1 > r1)
-                    yy;
-                else
-                    nn;
-            }
-        }
-    }
+    cout << f(n, 0) << ln;
 }
 
 signed main()
@@ -167,8 +155,17 @@ signed main()
     // freopen("output.txt", "w", stdout);
     // sieve();
     // factorial();
+
+    for (int i = 1; i <= 40000; i++)
+    {
+        if (isPal(i))
+            pal.push_back(i);
+    }
+
+    memset(dp, -1, sizeof(dp));
+    
     int t_e_s_t = 1;
-    // cin >> t_e_s_t;
+    cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

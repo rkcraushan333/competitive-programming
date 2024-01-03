@@ -119,39 +119,27 @@ int ncr(int n, int r)
 // by inforkc
 void inforkc()
 {
-    vector<vector<char>> v(3, vector<char>(3));
+    int a = 0, b = 0, c = 0;
     for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
         {
-            cin >> v[i][j];
+            char ch;
+            cin >> ch;
+            if (ch == 'A')
+                a++;
+            else if (ch == 'B')
+                b++;
+            else
+                c++;
         }
     }
-    for (int i = 0; i < 3; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            if (v[i][j] == '?')
-            {
-                set<char> s;
-                s.insert('A');
-                s.insert('B');
-                s.insert('C');
-                for (int k = 0; k < 3; k++)
-                {
-                    if (v[i][k] != '?')
-                    {
-                        s.erase(v[i][k]);
-                    }
-                }
-                for (auto x : s)
-                {
-                    cout << x << ln;
-                    return;
-                }
-            }
-        }
-    }
+    if (a == 2)
+        cout << "A" << ln;
+    else if (b == 2)
+        cout << "B" << ln;
+    else
+        cout << "C" << ln;
 }
 
 signed main()

@@ -10,15 +10,15 @@ using namespace __gnu_pbds;
 #define forn(i, a, b) for (int i = a; i < b; i++)
 #define pqmin priority_queue<int, vector<int>, greater<int>>
 #define pqmax priority_queue<int>
-#define um unordered_map<int, int>
-#define us unordered_set<int>
+#define mp map<int, int>
+#define st set<int>
 #define pb push_back
 #define ln "\n"
 #define yy cout << "Yes" << ln
 #define nn cout << "No" << ln
 #define pi 3.14159265358979323846
 #define rsz resize
-const int mod = 998244353;
+const int mod = 1e9 + 7;
 #define dbg cout << "debug" << ln;
 tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics_node_update> T;
 // Ordered set functions user less_equal for multiset
@@ -117,14 +117,66 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc
+void change(string &s, string &t)
+{
+    char a = s[s.size() - 1], b = t[t.size() - 1];
+    s[s.size() - 1] = '0';
+    t[t.size() - 1] = '0';
+    s += a;
+    t += b;
+    reverse(s.begin(), s.end());
+    reverse(t.begin(), t.end());
+    a = s[s.size() - 1], b = t[t.size() - 1];
+    s[s.size() - 1] = '0';
+    t[t.size() - 1] = '0';
+    s += a;
+    t += b;
+    reverse(s.begin(), s.end());
+    reverse(t.begin(), t.end());
+}
 void inforkc()
 {
     int n;
     cin >> n;
-    v64 v(n);
-    forn(i, 0, n) cin >> v[i];
-    
+    if (n == 1)
+    {
+        cout << 1 << ln;
+        return;
+    }
+    vector<string> v;
+    v.push_back("169");
+    v.push_back("196");
+    v.push_back("961");
+    if (n == 3)
+    {
+        for (auto i : v)
+            cout << i << ln;
+        return;
+    }
+    n -= 3;
+    while (n)
+    {
+        n -= 2;
+        string s1 = v[0], s2 = v[v.size() - 1];
+        change(s1, s2);
+
+        v.push_back(s2);
+        reverse(v.begin(), v.end());
+        v.push_back(s1);
+        reverse(v.begin(), v.end());
+        for (int i = 1; i < v.size() - 1; i++)
+        {
+            v[i].push_back('0');
+            v[i].push_back('0');
+        }
+    }
+    for (auto i : v)
+        cout << i << ln;
 }
+
+// 169 196 961
+// 10609 16900 19600 61009 90601
+// 1006009 1060900 1690000 1960000 6100900 9006001 9060100
 
 signed main()
 {

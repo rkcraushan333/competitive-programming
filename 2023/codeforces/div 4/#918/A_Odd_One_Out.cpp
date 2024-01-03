@@ -121,18 +121,7 @@ void inforkc()
 {
     int a, b, c;
     cin >> a >> b >> c;
-    map<int, int> mp;
-    mp[a]++;
-    mp[b]++;
-    mp[c]++;
-    for (auto i : mp)
-    {
-        if (i.second == 1)
-        {
-            cout << i.first << ln;
-            return;
-        }
-    }
+    cout << (a ^ b ^ c) << ln;
 }
 
 signed main()

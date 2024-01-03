@@ -1,4 +1,3 @@
-// फल की चिंता मत करो बालक, बस करते जाओ ||
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -7,13 +6,18 @@ using namespace __gnu_pbds;
 #define int long long
 #define v64 vector<int>
 #define vp64 vector<pair<int, int>>
+#define p64 pair<int, int>
 #define forn(i, a, b) for (int i = a; i < b; i++)
 #define pqmin priority_queue<int, vector<int>, greater<int>>
 #define pqmax priority_queue<int>
+#define mp map<int, int>
+#define st set<int>
+#define pb push_back
 #define ln "\n"
-#define yy cout << "YES" << ln
-#define nn cout << "NO" << ln
+#define yy cout << "Yes" << ln
+#define nn cout << "No" << ln
 #define pi 3.14159265358979323846
+#define rsz resize
 const int mod = 1e9 + 7;
 #define dbg cout << "debug" << ln;
 tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics_node_update> T;
@@ -112,51 +116,23 @@ int ncr(int n, int r)
 }
 
 // for inverse modulo (k^mod-2)%mod
-// by inforkc => don't use hashing in codeforces instead use set and map
+// by inforkc
 void inforkc()
 {
-    int n;
-    cin >> n;
-    map<int, int> m1, m2;
-    while (n--)
+    int a, b;
+    cin >> a >> b;
+    if (a == 1)
     {
-        char c;
-        int l, r;
-        cin >> c >> l >> r;
-        if (c == '+')
-        {
-            m1[l]++;
-            m2[r]++;
-            int l1 = m1.rbegin()->first;
-            int r1 = m2.begin()->first;
-            if (l1 > r1)
-                yy;
-            else
-                nn;
-        }
-        else
-        {
-            m1[l]--;
-            m2[r]--;
-            if (m1[l] == 0)
-                m1.erase(l);
-            if (m2[r] == 0)
-                m2.erase(r);
-            if (m1.size() == 0)
-            {
-                nn;
-            }
-            else
-            {
-                int l1 = m1.rbegin()->first;
-                int r1 = m2.begin()->first;
-                if (l1 > r1)
-                    yy;
-                else
-                    nn;
-            }
-        }
+        cout << b * b << ln;
+        return;
     }
+    if (b % a == 0)
+    {
+        cout << b * (b / a) << ln;
+        return;
+    }
+    int ans = a * b / (__gcd(a, b));
+    cout << ans << ln;
 }
 
 signed main()
@@ -168,7 +144,7 @@ signed main()
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    // cin >> t_e_s_t;
+    cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

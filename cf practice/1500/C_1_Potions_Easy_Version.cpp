@@ -11,8 +11,8 @@ using namespace __gnu_pbds;
 #define pqmin priority_queue<int, vector<int>, greater<int>>
 #define pqmax priority_queue<int>
 #define ln "\n"
-#define yy cout << "YES" << ln
-#define nn cout << "NO" << ln
+#define yy cout << "Yes" << ln
+#define nn cout << "No" << ln
 #define pi 3.14159265358979323846
 const int mod = 1e9 + 7;
 #define dbg cout << "debug" << ln;
@@ -113,50 +113,68 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
+void inforkc1()
+{
+    int n;
+    cin >> n;
+    pqmin pq;
+    int sum = 0;
+    forn(i, 0, n)
+    {
+        int x;
+        cin >> x;
+        pq.push(x);
+        sum += x;
+        while (sum < 0)
+        {
+            sum -= pq.top();
+            pq.pop();
+        }
+    }
+    cout << pq.size() << ln;
+}
+
 void inforkc()
 {
     int n;
     cin >> n;
-    map<int, int> m1, m2;
-    while (n--)
+    v64 v(n);
+    forn(i, 0, n)
     {
-        char c;
-        int l, r;
-        cin >> c >> l >> r;
-        if (c == '+')
+        cin >> v[i];
+    }
+
+    vector<v64> dp(n + 1, v64(n + 1, INT64_MIN));
+
+    for (int i = 0; i <= n; i++)
+    {
+        dp[i][0] = 0;
+    }
+
+    // dp[i][j] => i index tak ham j potion piye hai to max health kitna hoga till now
+    // 0 4 0 1 -2 -1 -4
+    int ans = 0;
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = 1; j <= i; j++)
         {
-            m1[l]++;
-            m2[r]++;
-            int l1 = m1.rbegin()->first;
-            int r1 = m2.begin()->first;
-            if (l1 > r1)
-                yy;
-            else
-                nn;
-        }
-        else
-        {
-            m1[l]--;
-            m2[r]--;
-            if (m1[l] == 0)
-                m1.erase(l);
-            if (m2[r] == 0)
-                m2.erase(r);
-            if (m1.size() == 0)
+            // Take & Not Take
+            if (dp[i - 1][j - 1] >= 0)
             {
-                nn;
+                dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - 1] + v[i - 1]);
             }
             else
             {
-                int l1 = m1.rbegin()->first;
-                int r1 = m2.begin()->first;
-                if (l1 > r1)
-                    yy;
-                else
-                    nn;
+                dp[i][j] = dp[i - 1][j];
+            }
+            if (dp[i][j] >= 0)
+            {
+                ans = max(ans, j);
             }
         }
     }
+
+    cout << ans << ln;
 }
 
 signed main()

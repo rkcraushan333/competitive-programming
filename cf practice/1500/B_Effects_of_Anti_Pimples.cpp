@@ -11,10 +11,10 @@ using namespace __gnu_pbds;
 #define pqmin priority_queue<int, vector<int>, greater<int>>
 #define pqmax priority_queue<int>
 #define ln "\n"
-#define yy cout << "YES" << ln
-#define nn cout << "NO" << ln
+#define yy cout << "Yes" << ln
+#define nn cout << "No" << ln
 #define pi 3.14159265358979323846
-const int mod = 1e9 + 7;
+const int mod = 998244353;
 #define dbg cout << "debug" << ln;
 tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics_node_update> T;
 // Ordered set functions user less_equal for multiset
@@ -115,48 +115,26 @@ int ncr(int n, int r)
 // by inforkc => don't use hashing in codeforces instead use set and map
 void inforkc()
 {
+    int ans = 0;
     int n;
     cin >> n;
-    map<int, int> m1, m2;
-    while (n--)
+    v64 v(n);
+    forn(i, 0, n)
     {
-        char c;
-        int l, r;
-        cin >> c >> l >> r;
-        if (c == '+')
-        {
-            m1[l]++;
-            m2[r]++;
-            int l1 = m1.rbegin()->first;
-            int r1 = m2.begin()->first;
-            if (l1 > r1)
-                yy;
-            else
-                nn;
-        }
-        else
-        {
-            m1[l]--;
-            m2[r]--;
-            if (m1[l] == 0)
-                m1.erase(l);
-            if (m2[r] == 0)
-                m2.erase(r);
-            if (m1.size() == 0)
-            {
-                nn;
-            }
-            else
-            {
-                int l1 = m1.rbegin()->first;
-                int r1 = m2.begin()->first;
-                if (l1 > r1)
-                    yy;
-                else
-                    nn;
-            }
-        }
+        cin >> v[i];
     }
+    v64 vmx(n + 1);
+    for (int i = 1; i <= n; i++)
+    {
+        int curr = v[i - 1];
+        for (int j = 2 * i; j <= n; j += i)
+        {
+            curr = max(curr, v[j - 1]);
+        }
+        vmx[i] = curr;
+    }
+    ans += (fastexpo(2, n - 1, mod) * vmx[1]) % mod;
+    ans %= mod;
 }
 
 signed main()

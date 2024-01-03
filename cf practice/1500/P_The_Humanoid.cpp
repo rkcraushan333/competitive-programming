@@ -10,16 +10,16 @@ using namespace __gnu_pbds;
 #define forn(i, a, b) for (int i = a; i < b; i++)
 #define pqmin priority_queue<int, vector<int>, greater<int>>
 #define pqmax priority_queue<int>
-#define um unordered_map<int, int>
-#define us unordered_set<int>
+#define mp map<int,int>
+#define st set<int>
 #define pb push_back
 #define ln "\n"
-#define yy cout << "Yes" << ln
-#define nn cout << "No" << ln
+#define yy cout<<"Yes"<<ln
+#define nn cout<<"No"<<ln
 #define pi 3.14159265358979323846
 #define rsz resize
 const int mod = 1e9 + 7;
-#define dbg cout << "debug" << ln;
+#define dbg cout<<"debug"<<ln;
 tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics_node_update> T;
 // Ordered set functions user less_equal for multiset
 // it=s.find_by_order(x) (for index)
@@ -35,17 +35,15 @@ void factorial()
 }
 int pows[1000001];
 bool done = 0;
-int power10(int n)
-{
-    if (!done)
-    {
+int power10(int n){
+    if(!done){
         pows[0] = 1;
-        for (int i = 1; i <= 1000000; i++)
-            pows[i] = (pows[i - 1] * 10LL) % mod;
+        for(int i = 1; i <= 1000000; i++)
+            pows[i] = (pows[i-1] * 10LL) % mod;
         done = 1;
     }
     return pows[n];
-}
+ }
 vector<int> prime;
 void sieve()
 {
@@ -73,8 +71,7 @@ v64 primefac(int n)
         res.push_back(prime[n]);
         n /= prime[n];
     }
-    if (n != 1)
-        res.push_back(n);
+    if(n!=1) res.push_back(n);
     return res;
 }
 int fastexpo(int a, int b, int m)
@@ -130,7 +127,7 @@ signed main()
     // freopen("output.txt", "w", stdout);
     // sieve();
     // factorial();
-    int t_e_s_t = 1;
+    int t_e_s_t=1;
     cin >> t_e_s_t;
     while (t_e_s_t--)
     {
