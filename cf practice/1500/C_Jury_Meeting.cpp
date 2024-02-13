@@ -14,7 +14,7 @@ using namespace __gnu_pbds;
 #define yy cout << "Yes" << ln
 #define nn cout << "No" << ln
 #define pi 3.14159265358979323846
-const int mod = 1e9 + 7;
+const int mod = 998244353;
 #define dbg cout << "debug" << ln;
 tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics_node_update> T;
 // Ordered set functions user less_equal for multiset
@@ -115,10 +115,46 @@ int ncr(int n, int r)
 // by inforkc => don't use hashing in codeforces instead use set and map
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
-}
+    int n;
+    cin >> n;
+    v64 v(n);
+    forn(i, 0, n)
+    {
+        cin >> v[i];
+    }
+    sort(v.begin(), v.end());
 
+    if (v[n - 1] - v[n - 2] > 1)
+    {
+        cout << 0 << ln;
+        return;
+    }
+
+    if (v[n - 1] - v[n - 2] == 0)
+    {
+        cout << fac[n] << ln;
+        return;
+    }
+
+    int cnt = 0;
+    forn(i, 0, n)
+    {
+        if (v[i] == v[n - 2])
+            cnt++;
+    }
+
+    int ans = fac[n];
+    for (int i = n; i > cnt; i--)
+    {
+        int left = i - 1, cnt2 = n - cnt - 1;
+        int val = fac[cnt2] * ((ncr(left, cnt) * fac[cnt]) % mod);
+        val %= mod;
+        ans -= val;
+        ans += mod;
+        ans %= mod;
+    }
+    cout << ans << ln;
+}
 signed main()
 {
     ios_base::sync_with_stdio(false);
@@ -126,7 +162,7 @@ signed main()
     //  freopen("input.txt", "r", stdin);
     // freopen("output.txt", "w", stdout);
     // sieve();
-    // factorial();
+    factorial();
     int t_e_s_t = 1;
     cin >> t_e_s_t;
     while (t_e_s_t--)

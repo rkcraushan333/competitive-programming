@@ -115,8 +115,28 @@ int ncr(int n, int r)
 // by inforkc => don't use hashing in codeforces instead use set and map
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
+    v64 v1(n), v2(n);
+    forn(i, 0, n) cin >> v1[i];
+    forn(i, 0, n) cin >> v2[i];
+    sort(v1.begin(), v1.end());
+    sort(v2.rbegin(), v2.rend());
+    int t = v1[0] + v2[0];
+    forn(i, 0, n)
+    {
+        if (v1[i] + v2[i] != t)
+        {
+            cout << -1 << ln;
+            return;
+        }
+    }
+    for (auto i : v1)
+        cout << i << " ";
+    cout << ln;
+    for (auto i : v2)
+        cout << i << " ";
+    cout << ln;
 }
 
 signed main()

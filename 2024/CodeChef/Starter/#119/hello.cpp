@@ -117,6 +117,22 @@ void inforkc()
 {
     int n, k;
     cin >> n >> k;
+    int ans = 1e18;
+    int mx = 0;
+    while (n--)
+    {
+        int t;
+        cin >> t;
+        int x = t / k;
+        if (x != 0)
+        {
+            ans = min(ans, t - (x * k));
+        }
+    }
+    if (ans == 1e18)
+        cout << -1 << ln;
+    else
+        cout << ans << ln;
 }
 
 signed main()

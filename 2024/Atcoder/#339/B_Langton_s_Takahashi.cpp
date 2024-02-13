@@ -115,8 +115,71 @@ int ncr(int n, int r)
 // by inforkc => don't use hashing in codeforces instead use set and map
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    int i = 0, j = 0;
+    int r = 0;
+    int n, m, x;
+    cin >> n >> m >> x;
+    vector<vector<char>> v(n, vector<char>(m));
+    forn(i, 0, n)
+    {
+        forn(j, 0, m)
+        {
+            v[i][j] = '.';
+        }
+    }
+    while (x--)
+    {
+        if (v[i][j] == '.')
+        {
+            v[i][j] = '#';
+            r = (r + 1) % 4;
+            if (r == 0)
+            {
+                i = (i - 1 + n) % n;
+            }
+            else if (r == 1)
+            {
+                j = (j + 1) % m;
+            }
+            else if (r == 2)
+            {
+                i = (i + 1) % n;
+            }
+            else
+            {
+                j = (j - 1 + m) % m;
+            }
+        }
+        else
+        {
+            v[i][j] = '.';
+            r = (r - 1 + 4) % 4;
+            if (r == 0)
+            {
+                i = (i - 1 + n) % n;
+            }
+            else if (r == 1)
+            {
+                j = (j + 1) % m;
+            }
+            else if (r == 2)
+            {
+                i = (i + 1) % n;
+            }
+            else
+            {
+                j = (j - 1 + m) % m;
+            }
+        }
+    }
+    forn(i, 0, n)
+    {
+        forn(j, 0, m)
+        {
+            cout << v[i][j];
+        }
+        cout << ln;
+    }
 }
 
 signed main()
@@ -128,7 +191,7 @@ signed main()
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
+    // cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

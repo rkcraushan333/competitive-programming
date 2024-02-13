@@ -113,10 +113,48 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
+
+bool check(int n, int d)
+{
+    if ((n * (n + 1)) / 2 >= d)
+        return true;
+    return false;
+}
+
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    int a, b;
+    cin >> a >> b;
+
+    if (a == b)
+    {
+        cout << 0 << ln;
+        return;
+    }
+
+    int d = abs(a - b);
+    int s = 0, e = 1e5;
+
+    while (e - s > 1)
+    {
+        int mid = (s + e) >> 1;
+        if (check(mid, d))
+            e = mid;
+        else
+            s = mid;
+    }
+
+    if ((((e * (e + 1)) / 2) & 1) == (d & 1))
+    {
+        cout << e << ln;
+        return;
+    }
+
+    while ((((e * (e + 1)) / 2) & 1) != (d & 1))
+    {
+        e++;
+    }
+    cout << e << ln;
 }
 
 signed main()

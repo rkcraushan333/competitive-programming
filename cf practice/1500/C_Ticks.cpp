@@ -115,8 +115,89 @@ int ncr(int n, int r)
 // by inforkc => don't use hashing in codeforces instead use set and map
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    int n, m, k;
+    cin >> n >> m >> k;
+    vector<vector<char>> v(n, vector<char>(m));
+    forn(i, 0, n)
+    {
+        forn(j, 0, m)
+        {
+            cin >> v[i][j];
+        }
+    }
+    set<pair<int, int>> st;
+    forn(i, 0, n)
+    {
+        forn(j, 0, m)
+        {
+            if (v[i][j] == '*')
+            {
+                int curr = k;
+                while (true)
+                {
+                    if ((n - i <= curr) || (m - j < 2 * curr + 1))
+                        break;
+                    // cout << i << " " << j << ln;
+                    set<pair<int, int>> tst;
+                    bool ok = 1;
+                    int i1 = i, j1 = j;
+                    // for traversing through downward diagonal
+                    int cnt = curr;
+                    while (cnt--)
+                    {
+                        if (v[i1][j1] != '*')
+                        {
+                            ok = 0;
+                            break;
+                        }
+                        tst.insert({i1, j1});
+                        i1++;
+                        j1++;
+                    }
+                    if (ok == 0 || (v[i1][j1] != '*'))
+                    {
+                        curr++;
+                        continue;
+                    }
+                    tst.insert({i1, j1});
+                    // for traversing through upward diagonal
+                    cnt = curr;
+
+                    while (cnt--)
+                    {
+                        i1--;
+                        j1++;
+                        if (v[i1][j1] != '*')
+                        {
+                            ok = 0;
+                            break;
+                        }
+                        tst.insert({i1, j1});
+                    }
+                    curr++;
+                    if (ok == 0)
+                        continue;
+                    for (auto x : tst)
+                        st.insert(x);
+                }
+            }
+        }
+    }
+    forn(i, 0, n)
+    {
+        forn(j, 0, m)
+        {
+            if (v[i][j] == '*')
+            {
+                if (st.count({i, j}) == 0)
+                {
+                    cout << "NO" << ln;
+                    return;
+                }
+            }
+        }
+    }
+    cout << "YES" << ln;
 }
 
 signed main()

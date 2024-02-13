@@ -113,10 +113,11 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
+
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    int x, l, n;
+    cin >> x >> l >> n;
 }
 
 signed main()

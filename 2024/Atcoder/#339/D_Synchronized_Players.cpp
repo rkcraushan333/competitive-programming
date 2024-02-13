@@ -112,11 +112,54 @@ int ncr(int n, int r)
 }
 
 // for inverse modulo (k^mod-2)%mod
-// by inforkc => don't use hashing in codeforces instead use set and map
+// by inforkc => don't use hashing instead use set and map
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
+    vector<vector<char>> v(n, vector<char>(n));
+    int i1, j1, i2, j2, c = 0;
+    forn(i, 0, n)
+    {
+        forn(j, 0, n)
+        {
+            cin >> v[i][j];
+            if (v[i][j] == 'P')
+            {
+                if (c == 0)
+                {
+                    i1 = i;
+                    j1 = j;
+                    c = 1;
+                }
+                else
+                {
+                    i2 = i;
+                    j2 = j;
+                }
+            }
+        }
+    }
+    int dis[n][n][n][n] = {1e9};
+    queue<vector<int>> q;
+    int ans = INT64_MAX;
+    q.push({i1, j1, 0});
+    q.push({i2, j2, 0});
+    int dx[4] = {0, 1, -1, 0};
+    int dy[4] = {1, 0, 0, -1};
+    while (!q.empty())
+    {
+        auto a = q.front();
+        q.pop();
+        auto b = q.front();
+        q.pop();
+        int x1 = a[0], y1 = a[1], d1 = a[2];
+        int x2 = b[0], y2 = b[1], d2 = b[2];
+        if (x1 == x2 && y1 == y2)
+        {
+            dis[x1][y1][x2][y2] = max(d1, d1);
+        }
+    }
 }
 
 signed main()
@@ -128,7 +171,6 @@ signed main()
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

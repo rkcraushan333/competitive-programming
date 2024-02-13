@@ -113,10 +113,61 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
+
+int f(string &s, vector<vector<v64>> &dp, int i = 0, int a = 0, int takea = 0)
+{
+    if (i == s.size())
+    {
+        return a == 0;
+    }
+    int &rkc = dp[i][a][takea];
+    if (rkc != -1)
+        return rkc;
+    int ans = 0;
+    if (a == 0)
+    {
+        if (s[i] == 'a')
+        {
+            ans += f(s, dp, i + 1, a, takea); // do nothing
+            ans %= mod;
+            if (takea == 0)
+                ans += f(s, dp, i + 1, 0, 0); // take a
+            ans %= mod;
+
+            ans += f(s, dp, i + 1, 1, 0); // take ab
+            ans %= mod;
+        }
+        else
+        {
+            ans += f(s, dp, i + 1, a, takea);
+            ans %= mod;
+        }
+    }
+    else
+    {
+        if (s[i] == 'b')
+        {
+            ans += f(s, dp, i + 1, a, takea); // do nothing
+            ans %= mod;
+
+            ans += f(s, dp, i + 1, 0, 1); // taken ab
+            ans %= mod;
+        }
+        else
+        {
+            ans += f(s, dp, i + 1, a, takea);
+            ans %= mod;
+        }
+    }
+    return rkc = ans;
+}
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    // NOTE :-  aba(can be formed by both 2 and 13) are not uniquely decodable.
+    string s;
+    cin >> s;
+    vector<vector<v64>> dp(s.size() + 1, vector<v64>(3, v64(2, -1)));
+    cout << f(s, dp) - 1 << ln;
 }
 
 signed main()

@@ -113,10 +113,66 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
+void dfs(int s, vector<vector<int>> &adj, v64 &vis, v64 &res, map<pair<int, int>, int> &mp, int curr = 2)
+{
+    vis[s] = 1;
+    for (int child : adj[s])
+    {
+        if (!vis[child])
+        {
+            res[mp[{s, child}]] = curr;
+            if (curr == 2)
+                dfs(child, adj, vis, res, mp, 3);
+            else
+                dfs(child, adj, vis, res, mp, 2);
+        }
+    }
+}
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
+    bool ans = 1;
+    vector<vector<int>> adj(n + 1);
+    map<pair<int, int>, int> mp;
+    forn(i, 0, n - 1)
+    {
+        int a, b;
+        cin >> a >> b;
+        if (a > b)
+            swap(a, b);
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+        mp[{a, b}] = i;
+        mp[{b, a}] = i;
+        if (adj[a].size() > 2 || adj[b].size() > 2)
+        {
+            ans = 0;
+        }
+    }
+
+    if (ans == 0)
+    {
+        cout << -1 << ln;
+        return;
+    }
+
+    int k;
+    for (int i = 1; i <= n; i++)
+    {
+        if (adj[i].size() == 1)
+        {
+            k = i;
+            break;
+        }
+    }
+    vector<int> res(n - 1), vis(n + 1);
+    dfs(k, adj, vis, res, mp);
+    for (auto i : res)
+    {
+        cout << i << " ";
+    }
+    cout << ln;
 }
 
 signed main()

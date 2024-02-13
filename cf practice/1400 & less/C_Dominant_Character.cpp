@@ -115,8 +115,28 @@ int ncr(int n, int r)
 // by inforkc => don't use hashing in codeforces instead use set and map
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    // possible answers = "aa" ,"aba", "aca", "abca", "acba", "abbacca", "accabba"
+
+    int n, res = INT_MAX;
+    string s;
+    cin >> n >> s;
+    vector<string> v = {"aa", "aba", "aca", "abca", "acba", "abbacca", "accabba"};
+    set<string> st;
+    for (auto i : v)
+        st.insert(i);
+
+    forn(i, 0, s.size() - 1)
+    {
+        string t = "";
+        t += s[i];
+        forn(j, i + 1, min(i + 7, (int)s.size()))
+        {
+            t += s[j];
+            if (st.find(t) != st.end())
+                res = min(res, (int)t.size());
+        }
+    }
+    cout << (res == INT_MAX ? -1 : res) << endl;
 }
 
 signed main()

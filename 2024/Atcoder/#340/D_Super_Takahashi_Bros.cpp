@@ -112,11 +112,47 @@ int ncr(int n, int r)
 }
 
 // for inverse modulo (k^mod-2)%mod
-// by inforkc => don't use hashing in codeforces instead use set and map
+// by inforkc => don't use hashing instead use set and map
+vector<int> dijkstra(vector<vector<pair<int, int>>> &adj, int source)
+{
+    int n = adj.size();
+    set<pair<int, int>> st;
+    st.insert({0, source});
+    vector<int> dj(n + 1, INT64_MAX);
+    dj[source] = 0;
+    while (st.size())
+    {
+        auto p = *st.begin();
+        st.erase(p);
+        int wt = p.first;
+        int node = p.second;
+        for (auto j : adj[node])
+        {
+            if (dj[j.first] > j.second + wt)
+            {
+                if (st.count({dj[j.first], j.first}))
+                    st.erase({dj[j.first], j.first});
+                dj[j.first] = j.second + wt;
+                st.insert({j.second + wt, j.first});
+            }
+        }
+    }
+    return dj;
+}
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
+    vector<vector<pair<int, int>>> adj(n + 1);
+    forn(i, 1, n)
+    {
+        int a, b, c;
+        cin >> a >> b >> c;
+        adj[i].push_back({i + 1, a});
+        adj[i].push_back({c, b});
+    }
+    v64 x = dijkstra(adj, 1);
+    cout << x[n];
 }
 
 signed main()
@@ -128,7 +164,6 @@ signed main()
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

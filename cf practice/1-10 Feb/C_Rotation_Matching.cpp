@@ -115,8 +115,25 @@ int ncr(int n, int r)
 // by inforkc => don't use hashing in codeforces instead use set and map
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
+    map<int, int> mp;
+    forn(i, 0, n)
+    {
+        int x;
+        cin >> x;
+        mp[x] = i;
+    }
+    map<int, int> mp2;
+    int ans = 0;
+    forn(i, 0, n)
+    {
+        int x;
+        cin >> x;
+        mp2[(mp[x] - i + n) % n]++;
+        ans = max(ans, mp2[(mp[x] - i + n) % n]);
+    }
+    cout << ans << ln;
 }
 
 signed main()
@@ -128,7 +145,7 @@ signed main()
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
+    // cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

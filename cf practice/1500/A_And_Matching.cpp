@@ -117,6 +117,57 @@ void inforkc()
 {
     int n, k;
     cin >> n >> k;
+    if (n == 4 && k == 3)
+    {
+        cout << -1 << ln;
+        return;
+    }
+    v64 v(n);
+    for (int i = 0; i < 17; i++)
+    {
+        if (k & (1 << i))
+            v[1 << i] = 1;
+        if (k == 0)
+            break;
+    }
+    vp64 v2;
+
+    set<int> st;
+
+    v2.push_back({0, n - 1});
+
+    st.insert(0);
+    st.insert(n - 1);
+
+    for (int i = 0; i < n; i++)
+    {
+        if (v[i] == 1)
+        {
+            v2.push_back({i, n - i - 1});
+            st.insert(i);
+            st.insert(n - i - 1);
+        }
+        else
+        {
+            if (v[i] == 0 && v[n - i - 1] == 0)
+            {
+                if (st.count(i) || st.count(n - i - 1))
+                    continue;
+                cout << i << " " << n - i - 1 << ln;
+                st.insert(i);
+                st.insert(n - i - 1);
+            }
+        }
+    }
+    int id = 0, cnt = v2.size();
+    while (cnt--)
+    {
+        int nextid = id + 1;
+        nextid %= v2.size();
+        cout << v2[id].first << " " << v2[nextid].second << ln;
+        id++;
+        id %= v2.size();
+    }
 }
 
 signed main()

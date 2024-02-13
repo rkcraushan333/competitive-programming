@@ -117,6 +117,50 @@ void inforkc()
 {
     int n, k;
     cin >> n >> k;
+    v64 v(n);
+    int cnt = n;
+    int i = 0, in = 1, dec = 0;
+    while (cnt)
+    {
+        if (in == 1)
+        {
+            v[i] = cnt--;
+            if (i + k < n)
+            {
+                i += k;
+            }
+            else
+            {
+                if (i + 1 < n)
+                {
+                    i++;
+                }
+                else
+                {
+                    i -= k - 1;
+                }
+                in = 0;
+                dec = 1;
+            }
+        }
+        else
+        {
+            v[i] = cnt--;
+            if (i - k >= 0)
+            {
+                i -= k;
+            }
+            else
+            {
+                i++;
+                in = 1;
+                dec = 0;
+            }
+        }
+    }
+    for (auto i : v)
+        cout << i << " ";
+    cout << ln;
 }
 
 signed main()

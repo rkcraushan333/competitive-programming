@@ -115,8 +115,51 @@ int ncr(int n, int r)
 // by inforkc => don't use hashing in codeforces instead use set and map
 void inforkc()
 {
+    /*
+    3 cases arise
+    1 -> if all character are same => (2^k)*n
+    2 -> if string is palindromic => 2^(k+1)
+    3 -> remaining => 2^(k-1)
+    one more case
+    if(string == abaabaaba)
+    next one will give => abaabaabaabaabaaba => that has 4 S0 => so we have to use string matching algorithm
+    */
+
     int n, k;
-    cin >> n >> k;
+    string s;
+    cin >> n >> k >> s;
+    bool ok = 1;
+    // check for first case
+    forn(i, 1, n)
+    {
+        if (s[i] != s[i - 1])
+        {
+            ok = 0;
+            break;
+        }
+    }
+    if (ok)
+    {
+        cout << ((fastexpo(2, k, mod) * n) - 1) % mod << ln;
+        return;
+    }
+    // check for second case
+    ok = 1;
+    for (int i = 0; i < n / 2; i++)
+    {
+        if (s[i] != s[n - i - 1])
+        {
+            ok = 0;
+            break;
+        }
+    }
+    if (ok)
+    {
+        cout << (fastexpo(2, k, mod)) << ln;
+        return;
+    }
+    // check for third case
+    cout << (fastexpo(2, k - 1, mod)) << ln;
 }
 
 signed main()

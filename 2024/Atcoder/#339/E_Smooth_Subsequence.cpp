@@ -112,11 +112,63 @@ int ncr(int n, int r)
 }
 
 // for inverse modulo (k^mod-2)%mod
-// by inforkc => don't use hashing in codeforces instead use set and map
+// by inforkc => don't use hashing instead use set and map
+v64 st(2000001, 0);
+int query(int l, int r, int s, int e, int node = 1)
+{
+    if (l > e || r < s)
+        return 0;
+
+    // if (l <= e && r >= s)
+    //     return st[node];
+
+    if (s >= l && e <= r)
+        return st[node];
+
+    int mid = (s + e) / 2;
+    int left = query(l, r, s, mid, 2 * node);
+    int right = query(l, r, mid + 1, e, 2 * node + 1);
+    return max(left, right);
+}
+
+void update(int l, int s, int e, int val, int node = 1)
+{
+    if (l > e || l < s)
+        return;
+    if (s == e)
+    {
+        st[node] = val;
+        return;
+    }
+    int mid = (s + e) / 2;
+    update(l, s, mid, val, 2 * node);
+    update(l, mid + 1, e, val, 2 * node + 1);
+    st[node] = max(st[2 * node], st[2 * node + 1]);
+}
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    int n, d;
+    cin >> n >> d;
+    v64 v(n);
+    forn(i, 0, n)
+    {
+        cin >> v[i];
+    }
+    v64 dp(n);
+    for (int i = 0; i < n; i++)
+    {
+        int left = max(0ll, v[i] - d);
+        int right = min(500000 * 1ll, v[i] + d);
+        int mx = query(left, right, 0, 500000);
+        dp[i] = mx + 1;
+        update(v[i], 0, 500000, dp[i]);
+    }
+    int ans = 1;
+    for (auto i : dp)
+    {
+        ans = max(ans, i);
+    }
+    cout << ans << ln;
 }
 
 signed main()
@@ -128,7 +180,6 @@ signed main()
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

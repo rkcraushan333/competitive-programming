@@ -112,11 +112,42 @@ int ncr(int n, int r)
 }
 
 // for inverse modulo (k^mod-2)%mod
-// by inforkc => don't use hashing in codeforces instead use set and map
+// by inforkc => don't use hashing instead use set and map
+int val = INT64_MAX;
+bool check(int mid, v64 v)
+{
+    forn(i, 0, v.size())
+    {
+        mid += v[i];
+        if (mid < 0)
+            return false;
+    }
+    val = min(val, mid);
+    return true;
+}
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
+    v64 v(n);
+    forn(i, 0, n)
+    {
+        cin >> v[i];
+    }
+    int s = -1, e = 1e18;
+    while (e - s > 1)
+    {
+        int mid = (s + e) >> 1;
+        if (check(mid, v))
+        {
+            e = mid;
+        }
+        else
+        {
+            s = mid;
+        }
+    }
+    cout << val;
 }
 
 signed main()
@@ -128,7 +159,6 @@ signed main()
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

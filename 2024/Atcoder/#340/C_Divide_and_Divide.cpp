@@ -112,11 +112,23 @@ int ncr(int n, int r)
 }
 
 // for inverse modulo (k^mod-2)%mod
-// by inforkc => don't use hashing in codeforces instead use set and map
+// by inforkc => don't use hashing instead use set and map
+unordered_map<int, int> mp;
+int f(int n)
+{
+    if (n < 2)
+        return 0;
+    if (mp.count(n))
+    {
+        return mp[n];
+    }
+    return mp[n] = n + f(n / 2) + f((n + 1) / 2);
+}
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
+    cout << f(n) << ln;
 }
 
 signed main()
@@ -128,7 +140,6 @@ signed main()
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

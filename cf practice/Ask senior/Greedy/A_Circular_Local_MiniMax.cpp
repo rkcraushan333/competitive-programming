@@ -115,8 +115,60 @@ int ncr(int n, int r)
 // by inforkc => don't use hashing in codeforces instead use set and map
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
+    v64 v(n);
+    forn(i, 0, n)
+    {
+        cin >> v[i];
+    }
+    if (n & 1)
+    {
+        nn;
+        return;
+    }
+    sort(v.begin(), v.end());
+    int i = 0, j = n / 2, k = (n / 2) - 1;
+    v64 ans;
+    while (i <= k)
+    {
+        // cout << i << " " << j << " " << k << ln;
+        ans.push_back(v[j]);
+        j++;
+        if (v[j - 1] > v[k])
+        {
+            ans.push_back(v[k]);
+            k--;
+        }
+        else
+        {
+            ans.push_back(v[i]);
+            i++;
+        }
+    }
+    bool ok = 1;
+    v = ans;
+    if (!((v[0] > v[1] && v[0] > v[n - 1]) || (v[0] < v[1] && v[0] < v[n - 1])))
+        ok = 0;
+    if (!((v[n - 1] > v[n - 2] && v[n - 1] > v[0]) || (v[n - 1] < v[n - 2] && v[n - 1] < v[0])))
+        ok = 0;
+
+    forn(i, 1, n - 1)
+    {
+        if (!((v[i] > v[i - 1] && v[i] > v[i + 1]) || (v[i] < v[i - 1] && v[i] < v[i + 1])))
+        {
+            ok = 0;
+        }
+    }
+    if (ok)
+    {
+        yy;
+        for (auto i : v)
+            cout << i << " ";
+        cout << ln;
+    }
+    else
+        nn;
 }
 
 signed main()

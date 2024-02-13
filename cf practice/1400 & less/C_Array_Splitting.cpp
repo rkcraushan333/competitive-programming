@@ -117,6 +117,33 @@ void inforkc()
 {
     int n, k;
     cin >> n >> k;
+    v64 v(n);
+    forn(i, 0, n)
+    {
+        cin >> v[i];
+    }
+    vp64 v1;
+    for (int i = 0; i < n - 1; i++)
+    {
+        v1.push_back({v[i + 1] - v[i], i});
+    }
+    sort(v1.rbegin(), v1.rend());
+    unordered_set<int> st;
+    for (int i = 0; i < k - 1; i++)
+    {
+        st.insert(v1[i].second);
+    }
+    int ans = 0, last = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (st.count(i))
+        {
+            ans += v[i] - v[last];
+            last = i + 1;
+        }
+    }
+    ans += v[n - 1] - v[last];
+    cout << ans << ln;
 }
 
 signed main()
@@ -128,7 +155,7 @@ signed main()
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
+    // cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

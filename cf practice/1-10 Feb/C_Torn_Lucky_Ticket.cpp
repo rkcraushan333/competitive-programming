@@ -115,8 +115,59 @@ int ncr(int n, int r)
 // by inforkc => don't use hashing in codeforces instead use set and map
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
+    vector<string> v(n);
+    map<pair<int, int>, int> mp;
+    forn(i, 0, n)
+    {
+        cin >> v[i];
+        string s = v[i];
+        int ans = 0;
+        for (auto c : s)
+        {
+            ans += (c - '0');
+        }
+        mp[{s.size(), ans}]++;
+    }
+    int ans = 0;
+    for (auto s : v)
+    {
+        if (s.size() & 1)
+        {
+            // pichhe se
+            int currsum = 0, cnt = 0;
+            for (int i = s.size() - 1; i >= 0; i--)
+            {
+                currsum += s[i] - '0';
+                cnt++;
+                if (cnt & 1)
+                {
+                    if (mp.count({cnt, currsum}))
+                    {
+                        int a = 0, b = 0;
+                        int j = i, c = 0;
+                        while (j >= 0)
+                        {
+                            if (c & 1)
+                                a += s[j] - '0';
+                            else
+                                b += s[j] - '0';
+                            c++;
+                            j--;
+                        }
+                        if (a == b)
+                            ans += mp[{cnt, currsum}];
+                    }
+                }
+            }
+            // aage se
+            
+        }
+        else
+        {
+        }
+    }
 }
 
 signed main()
@@ -128,7 +179,7 @@ signed main()
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
+    // cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

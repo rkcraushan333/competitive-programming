@@ -117,6 +117,62 @@ void inforkc()
 {
     int n, k;
     cin >> n >> k;
+    v64 v1, v2;
+    forn(i, 1, n + 1)
+    {
+        if (i & 1)
+            v1.push_back(i);
+        else
+            v2.push_back(i);
+    }
+    v64 ans;
+    bool xxx = 0;
+    if (k & 1)
+    {
+        xxx = 1;
+    }
+    k++;
+    int a = 0, b = 0, c = 0;
+    while (k--)
+    {
+        if (c & 1)
+        {
+            ans.push_back(v2[b]);
+            b++;
+        }
+        else
+        {
+            ans.push_back(v1[a]);
+            a++;
+        }
+        c++;
+    }
+    while (a < v1.size())
+    {
+        cout << v1[a] << " ";
+        a++;
+    }
+    for (int i = 0; i < ans.size(); i++)
+    {
+        if (i == ans.size() - 1 && xxx == 0)
+        {
+            while (b < v2.size())
+            {
+                cout << v2[b] << " ";
+                b++;
+            }
+        }
+        cout << ans[i] << " ";
+    }
+    if (xxx == 1)
+    {
+        while (b < v2.size())
+        {
+            cout << v2[b] << " ";
+            b++;
+        }
+    }
+    cout << ln;
 }
 
 signed main()

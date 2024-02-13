@@ -115,8 +115,66 @@ int ncr(int n, int r)
 // by inforkc => don't use hashing in codeforces instead use set and map
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    // spiral
+    int n;
+    cin >> n;
+    vector<v64> v(n + 1, v64(n + 1));
+    int cnt = 1;
+    int i1 = 1, i2 = 1, j1 = n, j2 = n;
+    while (true)
+    {
+        for (int i = i1; i <= j1; i++)
+        {
+            v[i1][i] = cnt++;
+            if (cnt == n * n)
+                break;
+        }
+         if (cnt == n * n)
+                break;
+        i1++;
+        for (int i = i1; i <= j2; i++)
+        {
+            v[i][j2] = cnt++;
+            if (cnt == n * n)
+                break;
+        }
+         if (cnt == n * n)
+                break;
+        j2--;
+        for (int i = j2; i >= i2; i--)
+        {
+            v[j1][i] = cnt++;
+            if (cnt == n * n)
+                break;
+        }
+         if (cnt == n * n)
+                break;
+        j1--;
+        for (int i = j1; i >= i1; i--)
+        {
+            v[i][i2] = cnt++;
+            if (cnt == n * n)
+                break;
+        }
+         if (cnt == n * n)
+                break;
+        i2++;
+    }
+    forn(i, 1, n + 1)
+    {
+        forn(j, 1, n + 1)
+        {
+            if (i == (n + 1) / 2 && j == (n + 1) / 2)
+            {
+                cout << 'T' << " ";
+            }
+            else
+            {
+                cout << v[i][j] << " ";
+            }
+        }
+        cout << ln;
+    }
 }
 
 signed main()
@@ -128,7 +186,7 @@ signed main()
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
+    // cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

@@ -116,7 +116,45 @@ int ncr(int n, int r)
 void inforkc()
 {
     int n, k;
-    cin >> n >> k;
+    cin >> n;
+    map<int, int> mp;
+    forn(i, 0, n)
+    {
+        cin >> k;
+        mp[k]++;
+    }
+    v64 v;
+    for (auto i : mp)
+    {
+        v.push_back(i.second);
+    }
+    for (int i = 1; i < v.size(); i++)
+    {
+        v[i] += v[i - 1];
+    }
+    auto xxx = mp.end();
+    xxx--;
+    int id = v.size() - 2 * 1ll, ans = 0;
+    // cout << id << " ";
+    while (id >= 0)
+    {
+        int t = xxx->second;
+        if (t >= 2)
+        {
+            if (t > 2)
+            {
+                ans += (t * (t - 1) * (t - 2)) / 6;
+            }
+            ans += ((t * (t - 1)) / 2) * (v[id]);
+        }
+        xxx--;
+        id--;
+    }
+    if (v[0] > 2)
+    {
+        ans += (v[0] * (v[0] - 1) * (v[0] - 2)) / 6;
+    }
+    cout << ans << ln;
 }
 
 signed main()

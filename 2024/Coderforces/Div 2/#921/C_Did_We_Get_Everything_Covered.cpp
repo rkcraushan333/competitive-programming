@@ -113,10 +113,91 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
+bool f(string &s, string &t)
+{
+    int i = 0, j = 0, n = s.size(), m = t.size();
+    while (i < n && j < m)
+    {
+        if (s[i] == t[j])
+        {
+            i++;
+            j++;
+        }
+        else
+        {
+            i++;
+        }
+    }
+    return j == m;
+}
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    int n, k, m;
+    string s;
+    cin >> n >> k >> m >> s;
+    int cnt = 0;
+    set<char> st;
+    forn(i, 0, m)
+    {
+        st.insert(s[i]);
+        if (st.size() == k)
+        {
+            cnt++;
+            st.clear();
+        }
+    }
+
+    if (cnt >= n)
+    {
+        cout << "YES" << ln;
+        return;
+    }
+
+    cout << "NO" << ln;
+
+    forn(j, 0, k)
+    {
+        forn(i, 0, n)
+        {
+            forn(y, 0, k)
+            {
+                string sx;
+                forn(x, 0, i)
+                {
+                    sx += (char)(j + 'a');
+                }
+                sx += (char)(y + 'a');
+                forn(x, i + 1, n)
+                {
+                    sx += (char)(j + 'a');
+                }
+                if (f(s, sx) == 0)
+                {
+                    cout << sx << ln;
+                    return;
+                }
+            }
+        }
+    }
+
+    v64 vvv(k);
+    for (auto i : s)
+    {
+        vvv[i - 'a']++;
+    }
+    char ccc = 'a';
+    for (int i = 0; i < k; i++)
+    {
+        if (vvv[i] < n)
+        {
+            ccc = i + 'a';
+        }
+    }
+    while (n--)
+    {
+        cout << ccc;
+    }
+    cout << ln;
 }
 
 signed main()

@@ -117,6 +117,18 @@ void inforkc()
 {
     int n, k;
     cin >> n >> k;
+    for (int i = 1; i <= n; i++)
+    {
+        if (k >= (n / i) && k < (n / (i + 1)))
+        {
+            while (i <= n)
+            {
+                cout << i << " ";
+                i *= 2;
+                return;
+            }
+        }
+    }
 }
 
 signed main()

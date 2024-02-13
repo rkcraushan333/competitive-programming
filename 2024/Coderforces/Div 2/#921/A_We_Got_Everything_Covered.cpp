@@ -117,6 +117,14 @@ void inforkc()
 {
     int n, k;
     cin >> n >> k;
+    while (n--)
+    {
+        forn(i, 0, k)
+        {
+            cout << (char)('a' + i);
+        }
+    }
+    cout << ln;
 }
 
 signed main()

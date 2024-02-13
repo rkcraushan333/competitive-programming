@@ -115,8 +115,67 @@ int ncr(int n, int r)
 // by inforkc => don't use hashing in codeforces instead use set and map
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    int n, m;
+    cin >> n >> m;
+    vector<string> v(n);
+    forn(i, 0, n)
+    {
+        cin >> v[i];
+    }
+    set<int> st;
+    for (int i = n - 1; i >= 1; i--)
+    {
+        string s = v[i];
+        if (st.size() == 0)
+        {
+            for (int j = 0; j < m; j++)
+            {
+                if (s[j] == '1')
+                {
+                    st.insert(j);
+                }
+            }
+        }
+        else
+        {
+            set<int> st2;
+            int cnt = 0;
+            for (int j = 0; j < m; j++)
+            {
+                if (st.count(j))
+                {
+                    if (s[j] == '1')
+                    {
+                        cnt++;
+                    }
+                }
+                else if (s[j] == '1')
+                {
+                    st2.insert(j);
+                }
+            }
+            if (st2.size() + cnt <= 1)
+            {
+                st.clear();
+                continue;
+            }
+            if (cnt)
+            {
+                for (auto i : st)
+                    st2.insert(i);
+            }
+            st = st2;
+        }
+    }
+    int c1 = 0;
+    for (auto i : st)
+    {
+        if (v[0][i] == '1')
+        {
+            c1++;
+        }
+    }
+    cout << ncr(st.size(), c1) << ln;
 }
 
 signed main()
@@ -126,7 +185,7 @@ signed main()
     //  freopen("input.txt", "r", stdin);
     // freopen("output.txt", "w", stdout);
     // sieve();
-    // factorial();
+    factorial();
     int t_e_s_t = 1;
     cin >> t_e_s_t;
     while (t_e_s_t--)

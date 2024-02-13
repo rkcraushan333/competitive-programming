@@ -113,10 +113,52 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
+vp64 v;
+// producing all possible sum from all factorial values from 1! to 14! => total 2^14 = 16384
+void f(v64 v1, int i = 0, int val = 0, int cnt = 0)
+{
+    if (i == v1.size())
+    {
+        if (val <= 1e12 && val >= 0)
+        {
+            v.push_back({val, cnt});
+        }
+        return;
+    }
+    f(v1, i + 1, val, cnt);
+    f(v1, i + 1, val + v1[i], cnt + 1);
+}
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
+    int ans = INT_MAX, cnt = 0;
+
+    int temp = n;
+    while (temp)
+    {
+        if (temp & 1)
+            cnt++;
+        temp >>= 1;
+    }
+    ans = min(ans, cnt);
+    for (int i = 0; i < v.size(); i++)
+    {
+        if (v[i].first > n)
+            break;
+        cnt = 0;
+        temp = n;
+        cnt += v[i].second;
+        temp -= v[i].first;
+        while (temp)
+        {
+            if (temp & 1)
+                cnt++;
+            temp >>= 1;
+        }
+        ans = min(ans, cnt);
+    }
+    cout << ans << ln;
 }
 
 signed main()
@@ -127,6 +169,17 @@ signed main()
     // freopen("output.txt", "w", stdout);
     // sieve();
     // factorial();
+
+    int last = 1;
+    v64 fac;
+    forn(i, 1, 15)
+    {
+        last *= i;
+        fac.push_back(last);
+    }
+    f(fac);
+    sort(v.begin(), v.end());
+
     int t_e_s_t = 1;
     cin >> t_e_s_t;
     while (t_e_s_t--)

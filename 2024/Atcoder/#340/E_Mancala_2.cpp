@@ -112,11 +112,101 @@ int ncr(int n, int r)
 }
 
 // for inverse modulo (k^mod-2)%mod
-// by inforkc => don't use hashing in codeforces instead use set and map
+// by inforkc => don't use hashing instead use set and map
+
+v64 v, lzst;
+
+void update(int start, int end, int l, int r, int val, int node = 1)
+{
+    if (l > end || r < start)
+    {
+        return;
+    }
+    if (l <= start && r >= end)
+    {
+        lzst[node] += val;
+        return;
+    }
+
+    if (lzst[node] != 0)
+    {
+        if (start != end)
+        {
+            lzst[2 * node] += lzst[node];
+            lzst[2 * node + 1] += lzst[node];
+        }
+        else
+        {
+            v[start] += lzst[node];
+        }
+        lzst[node] = 0;
+    }
+    int mid = (start + end) >> 1;
+    update(start, mid, l, r, val, 2 * node);
+    update(mid + 1, end, l, r, val, 2 * node + 1);
+}
+int query(int start, int end, int i, int node)
+{
+    if (i > end || i < start)
+    {
+        return 0;
+    }
+    if (start == end)
+    {
+        v[i] += lzst[node];
+        lzst[node] = 0;
+        return v[i];
+    }
+    if (lzst[node] != 0)
+    {
+        lzst[2 * node] += lzst[node];
+        lzst[2 * node + 1] += lzst[node];
+        lzst[node] = 0;
+    }
+    int mid = (start + end) >> 1;
+    int left = query(start, mid, i, 2 * node);
+    int right = query(mid + 1, end, i, 2 * node + 1);
+    return left + right;
+}
+
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
+    int n, m;
+    cin >> n >> m;
+    lzst.resize(4 * n);
+    v.resize(n);
+    forn(i, 0, n)
+    {
+        cin >> v[i];
+    }
+    while (m--)
+    {
+        int i;
+        cin >> i;
+        int val = query(0, n - 1, i, 1);
+        v[i] = 0;
+        if (val >= n)
+        {
+            int x = val / n;
+            update(0, n - 1, 0, n - 1, x);
+            val = val % n;
+        }
+        if (val)
+        {
+            int left = min(n - i - 1, val);
+            update(0, n - 1, i + 1, i + left, 1);
+            val -= left;
+            if (val)
+            {
+                int right = val;
+                update(0, n - 1, 0, right - 1, 1);
+            }
+        }
+    }
+    for (int i = 0; i < n; i++)
+    {
+        cout << query(0, n - 1, i, 1) << " ";
+    }
 }
 
 signed main()
@@ -128,7 +218,6 @@ signed main()
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();
