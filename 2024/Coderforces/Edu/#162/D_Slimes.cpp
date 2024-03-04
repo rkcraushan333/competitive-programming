@@ -1,0 +1,253 @@
+// फल की चिंता मत करो बालक, बस करते जाओ ||
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace std;
+using namespace __gnu_pbds;
+#define int long long
+#define v64 vector<int>
+#define vp64 vector<pair<int, int>>
+#define forn(i, a, b) for (int i = a; i < b; i++)
+#define pqmin priority_queue<int, vector<int>, greater<int>>
+#define pqmax priority_queue<int>
+#define ln "\n"
+#define yy cout << "Yes" << ln
+#define nn cout << "No" << ln
+#define pi 3.14159265358979323846
+const int mod = 1e9 + 7;
+#define dbg cout << "debug" << ln;
+tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics_node_update> T;
+// Ordered set functions user less_equal for multiset
+// it=s.find_by_order(x) (for index)
+// s.order_of_key(x)(no of elements smaller than x)
+int fac[1000001];
+void factorial()
+{
+    fac[0] = fac[1] = 1;
+    forn(i, 2, 1000001)
+    {
+        fac[i] = (fac[i - 1] * i) % mod;
+    }
+}
+int pows[1000001];
+bool done = 0;
+int power10(int n)
+{
+    if (!done)
+    {
+        pows[0] = 1;
+        for (int i = 1; i <= 1000000; i++)
+            pows[i] = (pows[i - 1] * 10LL) % mod;
+        done = 1;
+    }
+    return pows[n];
+}
+vector<int> prime;
+void sieve()
+{
+    prime.resize(1e6 + 1);
+    for (int i = 0; i < prime.size(); i++)
+    {
+        prime[i] = i;
+    }
+    for (int i = 2; i <= 1e6; i++)
+    {
+        if (prime[i] == i)
+        {
+            for (int j = 2 * i; j <= 1e6; j += i)
+            {
+                prime[j] = i;
+            }
+        }
+    }
+}
+v64 primefac(int n)
+{
+    v64 res;
+    while (n != prime[n])
+    {
+        res.push_back(prime[n]);
+        n /= prime[n];
+    }
+    if (n != 1)
+        res.push_back(n);
+    return res;
+}
+int fastexpo(int a, int b, int m)
+{
+    a %= m;
+    int res = 1;
+    while (b > 0)
+    {
+        if (b & 1)
+            res = res * a % m;
+        a = a * a % m;
+        b >>= 1;
+    }
+    return res;
+}
+int fastpow(int a, int b)
+{
+    if (b == 0)
+        return 1;
+    int t = fastpow(a, b / 2);
+    if (b % 2 == 0)
+        return t * t;
+    else
+        return a * (t * t);
+}
+int inv(int n)
+{
+    return fastexpo(n, mod - 2, mod);
+}
+int ncr(int n, int r)
+{
+    if (r > n)
+        return 0;
+    // on factorial fun from main
+    int a = fac[n];
+    int b = (fac[r] * fac[n - r]) % mod;
+    int b1 = inv(b);
+    return (a * b1) % mod;
+}
+
+// for inverse modulo (k^mod-2)%mod
+// by inforkc => don't use hashing in codeforces instead use set and map
+int findind(v64 &s, int a, int b, int val)
+{
+    while (b - a > 1)
+    {
+        int mid = (a + b) / 2;
+        if (s[mid] > val)
+        {
+            a = mid;
+        }
+        else
+        {
+            b = mid;
+        }
+    }
+    return a;
+}
+void inforkc()
+{
+    int n;
+    cin >> n;
+    v64 v(n);
+    forn(i, 0, n)
+    {
+        cin >> v[i];
+    }
+    // next greater element or next unequal
+    v64 l(n, 1e18), r(n, 1e18);
+    int j1 = 0;
+    for (int i = 1; i < n; i++)
+    {
+        if (v[i] != v[i - 1])
+        {
+            for (int x = i - 1; x >= j1; x--)
+            {
+                l[x] = i;
+            }
+            j1 = i;
+        }
+    }
+    j1 = n - 1;
+    for (int i = n - 2; i >= 0; i--)
+    {
+        if (v[i] != v[i + 1])
+        {
+            for (int x = i + 1; x <= j1; x++)
+            {
+                r[x] = i;
+            }
+            j1 = i;
+        }
+    }
+    // for (auto i : l)
+    //     cout << i << " ";
+    // cout << ln;
+    // for (auto i : r)
+    //     cout << i << " ";
+    // cout << ln;
+
+    v64 p(n),
+        s(n);
+    p[0] = v[0];
+    s[n - 1] = v[n - 1];
+    forn(i, 1, n)
+    {
+        p[i] = p[i - 1] + v[i];
+    }
+    for (int i = n - 2; i >= 0; i--)
+    {
+        s[i] = s[i + 1] + v[i];
+    }
+    for (int i = 0; i < n; i++)
+    {
+        int left = 1e18, right = 1e18;
+        if (i > 0)
+        {
+            // find left
+            int val = v[i] + s[i];
+            int x = findind(s, -1, i, val);
+            if (x != -1)
+            {
+                if (((r[i - 1] != 1e18) && x <= r[i - 1]) || v[x] > v[i])
+                {
+                    left = i - x;
+                }
+                else
+                {
+                    left = r[i - 1];
+                }
+            }
+        }
+        if (i < n - 1)
+        {
+            // find right
+            int val = p[i] + v[i];
+            int x = upper_bound(p.begin() + i + 1, p.end(), val) - p.begin();
+            if (x != n)
+            {
+                if (x >= l[i + 1] || v[x] > v[i])
+                {
+                    right = x - i;
+                }
+                else
+                {
+                    right = l[i + 1];
+                }
+            }
+        }
+        int cc = min(left, right);
+        // cout << left << " " << right << endl;
+        if (cc == 1e18)
+        {
+            cout << -1 << " ";
+        }
+        else
+        {
+            // check for first unequal to the left or right
+            cout << cc << " ";
+        }
+    }
+    cout << ln;
+}
+
+signed main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    //  freopen("input.txt", "r", stdin);
+    // freopen("output.txt", "w", stdout);
+    // sieve();
+    // factorial();
+    int t_e_s_t = 1;
+    cin >> t_e_s_t;
+    while (t_e_s_t--)
+    {
+        inforkc();
+    }
+    return 0;
+}
