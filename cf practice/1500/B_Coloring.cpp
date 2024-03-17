@@ -113,75 +113,55 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
-bool f(string &s, string &t)
+void inforkc()
 {
-    int i = 0, j = 0, n = s.size(), m = t.size();
-    while (i < n && j < m)
+    int n, m, k;
+    cin >> n >> m >> k;
+    v64 v(m);
+    int mx = 0;
+    forn(i, 0, m)
     {
-        if (s[i] == t[j])
+        cin >> v[i];
+        mx = max(mx, v[i]);
+    }
+    int cnt = 0;
+    forn(i, 0, m)
+    {
+        if (mx == v[i])
         {
-            i++;
-            j++;
+            cnt++;
+        }
+    }
+    int val = n / k;
+    if (n % k == 0)
+    {
+        if (mx > val)
+        {
+            nn;
         }
         else
         {
-            i++;
+            yy;
         }
     }
-    return j == m;
-}
-
-void inforkc()
-{
-    // ans should be in the form of => {a,b,c...k terms in random order}.... upto n terms
-    int n, k, m;
-    string s;
-    cin >> n >> k >> m >> s;
-    v64 v(26);
-    int cnt = 0;
-    string ifnot = "";
-    forn(i, 0, m)
+    else
     {
-        v[s[i] - 'a']++;
-        bool ok = 1;
-        forn(j, 0, k)
+        val++;
+        int c1 = n % k;
+        // cout << c1 << " " << cnt << ln;
+        if (mx > val)
         {
-            if (v[j] == 0)
-            {
-                ok = 0;
-                break;
-            }
+            nn;
         }
-        if (ok)
+        else if (mx == val && c1 < cnt)
         {
-            ifnot += s[i];
-            cnt++;
-            if (cnt == n)
-            {
-                yy;
-                return;
-            }
-            forn(j, 0, k)
-            {
-                v[j] = 0;
-            }
+            nn;
+        }
+        else
+        {
+            yy;
         }
     }
-    nn;
-    char c;
-    forn(i, 0, k)
-    {
-        if (v[i] == 0)
-        {
-            c = 'a' + i;
-            break;
-        }
-    }
-    while (ifnot.size() < n)
-    {
-        ifnot += c;
-    }
-    cout << ifnot << ln;
 }
 
 signed main()

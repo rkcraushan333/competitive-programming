@@ -112,76 +112,49 @@ int ncr(int n, int r)
 }
 
 // for inverse modulo (k^mod-2)%mod
-// by inforkc => don't use hashing in codeforces instead use set and map
-bool f(string &s, string &t)
+// by inforkc => don't use hashing instead use set and map
+#define itr list<int>::iterator
+void inforkc()
 {
-    int i = 0, j = 0, n = s.size(), m = t.size();
-    while (i < n && j < m)
+    // Using linkedList or list stl
+    int n;
+    cin >> n;
+    list<int> v;
+    unordered_map<int, itr> mp;
+    forn(i, 0, n)
     {
-        if (s[i] == t[j])
+        int x;
+        cin >> x;
+        v.push_back(x);
+        auto itr1 = prev(v.end());
+        mp[x] = itr1;
+    }
+    int q;
+    cin >> q;
+    while (q--)
+    {
+        int t, a, b;
+        cin >> t;
+        if (t == 1)
         {
-            i++;
-            j++;
+            cin >> a >> b;
+            itr x1 = mp[a];
+            // push next to x1 iterator
+            itr it = v.emplace(++x1, b);
+            mp[b] = it;
         }
         else
         {
-            i++;
+            cin >> a;
+            // delete a from list
+            v.erase(mp[a]);
+            mp.erase(a);
         }
     }
-    return j == m;
-}
-
-void inforkc()
-{
-    // ans should be in the form of => {a,b,c...k terms in random order}.... upto n terms
-    int n, k, m;
-    string s;
-    cin >> n >> k >> m >> s;
-    v64 v(26);
-    int cnt = 0;
-    string ifnot = "";
-    forn(i, 0, m)
+    for (auto i : v)
     {
-        v[s[i] - 'a']++;
-        bool ok = 1;
-        forn(j, 0, k)
-        {
-            if (v[j] == 0)
-            {
-                ok = 0;
-                break;
-            }
-        }
-        if (ok)
-        {
-            ifnot += s[i];
-            cnt++;
-            if (cnt == n)
-            {
-                yy;
-                return;
-            }
-            forn(j, 0, k)
-            {
-                v[j] = 0;
-            }
-        }
+        cout << i << " ";
     }
-    nn;
-    char c;
-    forn(i, 0, k)
-    {
-        if (v[i] == 0)
-        {
-            c = 'a' + i;
-            break;
-        }
-    }
-    while (ifnot.size() < n)
-    {
-        ifnot += c;
-    }
-    cout << ifnot << ln;
 }
 
 signed main()
@@ -193,7 +166,6 @@ signed main()
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

@@ -112,76 +112,34 @@ int ncr(int n, int r)
 }
 
 // for inverse modulo (k^mod-2)%mod
-// by inforkc => don't use hashing in codeforces instead use set and map
-bool f(string &s, string &t)
-{
-    int i = 0, j = 0, n = s.size(), m = t.size();
-    while (i < n && j < m)
-    {
-        if (s[i] == t[j])
-        {
-            i++;
-            j++;
-        }
-        else
-        {
-            i++;
-        }
-    }
-    return j == m;
-}
-
+// by inforkc => don't use hashing instead use set and map
 void inforkc()
 {
-    // ans should be in the form of => {a,b,c...k terms in random order}.... upto n terms
-    int n, k, m;
     string s;
-    cin >> n >> k >> m >> s;
-    v64 v(26);
-    int cnt = 0;
-    string ifnot = "";
-    forn(i, 0, m)
+    cin >> s;
+    map<char, int> mp;
+    for (char c : s)
     {
-        v[s[i] - 'a']++;
-        bool ok = 1;
-        forn(j, 0, k)
+        mp[c]++;
+    }
+    int total = 0;
+    bool cc = 0;
+    for (auto i : mp)
+    {
+        total += i.second;
+        if (i.second > 1)
         {
-            if (v[j] == 0)
-            {
-                ok = 0;
-                break;
-            }
-        }
-        if (ok)
-        {
-            ifnot += s[i];
-            cnt++;
-            if (cnt == n)
-            {
-                yy;
-                return;
-            }
-            forn(j, 0, k)
-            {
-                v[j] = 0;
-            }
+            cc = 1;
         }
     }
-    nn;
-    char c;
-    forn(i, 0, k)
+    int ans = cc;
+    forn(i, 0, s.size())
     {
-        if (v[i] == 0)
-        {
-            c = 'a' + i;
-            break;
-        }
+        ans += total - mp[s[i]];
+        mp[s[i]]--;
+        total--;
     }
-    while (ifnot.size() < n)
-    {
-        ifnot += c;
-    }
-    cout << ifnot << ln;
+    cout << ans;
 }
 
 signed main()
@@ -193,7 +151,6 @@ signed main()
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

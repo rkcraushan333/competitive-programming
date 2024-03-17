@@ -113,75 +113,48 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
-bool f(string &s, string &t)
+void inforkc()
 {
-    int i = 0, j = 0, n = s.size(), m = t.size();
-    while (i < n && j < m)
+    int n;
+    cin >> n;
+    v64 c(n), a(n), b(n);
+    forn(i, 0, n)
     {
-        if (s[i] == t[j])
+        cin >> c[i];
+    }
+    forn(i, 0, n)
+    {
+        cin >> a[i];
+    }
+    forn(i, 0, n)
+    {
+        cin >> b[i];
+    }
+    int temp = abs(a[1] - b[1]) + 1;
+    int ans = temp;
+    forn(i, 1, n)
+    {
+        ans = max(ans, temp + c[i]);
+        if (i == n - 1 || a[i + 1] == b[i + 1])
         {
-            i++;
-            j++;
+            temp += c[i];
+            ans = max(ans, temp);
+            temp = 1;
         }
         else
         {
-            i++;
-        }
-    }
-    return j == m;
-}
-
-void inforkc()
-{
-    // ans should be in the form of => {a,b,c...k terms in random order}.... upto n terms
-    int n, k, m;
-    string s;
-    cin >> n >> k >> m >> s;
-    v64 v(26);
-    int cnt = 0;
-    string ifnot = "";
-    forn(i, 0, m)
-    {
-        v[s[i] - 'a']++;
-        bool ok = 1;
-        forn(j, 0, k)
-        {
-            if (v[j] == 0)
+            if (a[i + 1] < b[i + 1])
             {
-                ok = 0;
-                break;
+                temp += a[i + 1] + (c[i] - b[i + 1] + 1);
+            }
+            else
+            {
+                temp += b[i + 1] + (c[i] - a[i + 1] + 1);
             }
         }
-        if (ok)
-        {
-            ifnot += s[i];
-            cnt++;
-            if (cnt == n)
-            {
-                yy;
-                return;
-            }
-            forn(j, 0, k)
-            {
-                v[j] = 0;
-            }
-        }
+        // cout << temp << ln;
     }
-    nn;
-    char c;
-    forn(i, 0, k)
-    {
-        if (v[i] == 0)
-        {
-            c = 'a' + i;
-            break;
-        }
-    }
-    while (ifnot.size() < n)
-    {
-        ifnot += c;
-    }
-    cout << ifnot << ln;
+    cout << ans << ln;
 }
 
 signed main()

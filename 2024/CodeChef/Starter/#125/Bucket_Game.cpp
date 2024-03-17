@@ -113,75 +113,44 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
-bool f(string &s, string &t)
+void inforkc()
 {
-    int i = 0, j = 0, n = s.size(), m = t.size();
-    while (i < n && j < m)
+    int n;
+    cin >> n;
+    int cnt = 0, val = 0;
+    forn(i, 0, n)
     {
-        if (s[i] == t[j])
+        int k;
+        cin >> k;
+        if (k >= 2)
         {
-            i++;
-            j++;
+            val += k - 2;
         }
         else
         {
-            i++;
-        }
-    }
-    return j == m;
-}
-
-void inforkc()
-{
-    // ans should be in the form of => {a,b,c...k terms in random order}.... upto n terms
-    int n, k, m;
-    string s;
-    cin >> n >> k >> m >> s;
-    v64 v(26);
-    int cnt = 0;
-    string ifnot = "";
-    forn(i, 0, m)
-    {
-        v[s[i] - 'a']++;
-        bool ok = 1;
-        forn(j, 0, k)
-        {
-            if (v[j] == 0)
-            {
-                ok = 0;
-                break;
-            }
-        }
-        if (ok)
-        {
-            ifnot += s[i];
             cnt++;
-            if (cnt == n)
-            {
-                yy;
-                return;
-            }
-            forn(j, 0, k)
-            {
-                v[j] = 0;
-            }
         }
     }
-    nn;
-    char c;
-    forn(i, 0, k)
+    if (cnt % 2 == 0)
     {
-        if (v[i] == 0)
+        if (val & 1)
         {
-            c = 'a' + i;
-            break;
+            cout << "Alice" << ln;
+        }
+        else
+        {
+            cout << "Bob" << ln;
         }
     }
-    while (ifnot.size() < n)
+    else
     {
-        ifnot += c;
+        if (val & 1)
+        {
+            cout << "Bob" << ln;
+        }
+        else
+            cout << "Alice" << ln;
     }
-    cout << ifnot << ln;
 }
 
 signed main()

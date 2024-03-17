@@ -113,75 +113,68 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
-bool f(string &s, string &t)
+int dp[101][101];
+int f(string &t, vector<vector<string>> &v, int i = 0, int j = 0)
 {
-    int i = 0, j = 0, n = s.size(), m = t.size();
-    while (i < n && j < m)
+    if (j >= t.size())
     {
-        if (s[i] == t[j])
+        return 0;
+    }
+    if (i >= v.size())
+    {
+        return 1e9;
+    }
+    int &rkc = dp[i][j];
+    if (rkc != -1)
+        return rkc;
+    int ans = 1e9;
+    ans = min(ans, f(t, v, i + 1, j));
+    forn(k, 0, v[i].size())
+    {
+        if (t.size() - j >= v[i][k].size())
         {
-            i++;
-            j++;
-        }
-        else
-        {
-            i++;
+            int a = j, b = 0;
+            while (b < v[i][k].size())
+            {
+                if (t[a] == v[i][k][b])
+                {
+                    b++;
+                    a++;
+                }
+                else
+                    break;
+            }
+            if (b == v[i][k].size())
+            {
+                ans = min(ans, 1 + f(t, v, i + 1, a));
+            }
         }
     }
-    return j == m;
+    return rkc = ans;
 }
-
 void inforkc()
 {
-    // ans should be in the form of => {a,b,c...k terms in random order}.... upto n terms
-    int n, k, m;
-    string s;
-    cin >> n >> k >> m >> s;
-    v64 v(26);
-    int cnt = 0;
-    string ifnot = "";
-    forn(i, 0, m)
+    string t;
+    cin >> t;
+    int n;
+    cin >> n;
+    vector<vector<string>> v;
+    forn(i, 0, n)
     {
-        v[s[i] - 'a']++;
-        bool ok = 1;
+        int k;
+        cin >> k;
+        vector<string> temp;
         forn(j, 0, k)
         {
-            if (v[j] == 0)
-            {
-                ok = 0;
-                break;
-            }
+            string s;
+            cin >> s;
+            temp.push_back(s);
         }
-        if (ok)
-        {
-            ifnot += s[i];
-            cnt++;
-            if (cnt == n)
-            {
-                yy;
-                return;
-            }
-            forn(j, 0, k)
-            {
-                v[j] = 0;
-            }
-        }
+        v.push_back(temp);
     }
-    nn;
-    char c;
-    forn(i, 0, k)
-    {
-        if (v[i] == 0)
-        {
-            c = 'a' + i;
-            break;
-        }
-    }
-    while (ifnot.size() < n)
-    {
-        ifnot += c;
-    }
-    cout << ifnot << ln;
+    memset(dp, -1, sizeof(dp));
+    int ans = f(t, v);
+    cout << (ans >= 1e9 ? -1 : ans) << ln;
 }
 
 signed main()
@@ -193,7 +186,7 @@ signed main()
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
+    // cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

@@ -113,75 +113,73 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
-bool f(string &s, string &t)
-{
-    int i = 0, j = 0, n = s.size(), m = t.size();
-    while (i < n && j < m)
-    {
-        if (s[i] == t[j])
-        {
-            i++;
-            j++;
-        }
-        else
-        {
-            i++;
-        }
-    }
-    return j == m;
-}
-
+// bool f(string &s, vector<v64> &dp, int i, int j, int last)
+// {
+//     if (i == last)
+//     {
+//         return true;
+//     }
+//     int &rkc = dp[i][j];
+//     if (rkc != -1)
+//         return rkc;
+//     int ans = 1;
+//     if (s[i] == s[j] || s[i] == '?' || s[j] == '?')
+//     {
+//         ans &= f(s, dp, i + 1, j + 1, last);
+//     }
+//     else
+//     {
+//         ans &= 0;
+//     }
+//     return rkc = ans;
+// }
 void inforkc()
 {
-    // ans should be in the form of => {a,b,c...k terms in random order}.... upto n terms
-    int n, k, m;
     string s;
-    cin >> n >> k >> m >> s;
-    v64 v(26);
-    int cnt = 0;
-    string ifnot = "";
-    forn(i, 0, m)
+    cin >> s;
+    int n = s.size();
+    vector<v64> dp(n + 1, v64(n + 1, 0));
+    for (int i = n - 1; i >= 0; i--)
     {
-        v[s[i] - 'a']++;
-        bool ok = 1;
-        forn(j, 0, k)
+        for (int j = n - 1; j >= i; j--)
         {
-            if (v[j] == 0)
+            if (i == j)
+                dp[i][j] = 1;
+            else
             {
-                ok = 0;
-                break;
-            }
-        }
-        if (ok)
-        {
-            ifnot += s[i];
-            cnt++;
-            if (cnt == n)
-            {
-                yy;
-                return;
-            }
-            forn(j, 0, k)
-            {
-                v[j] = 0;
+                if (s[i] == s[j] || s[i] == '?' || s[j] == '?')
+                    dp[i][j] = 1 + dp[i + 1][j + 1];
+                else
+                    dp[i][j] = 0;
             }
         }
     }
-    nn;
-    char c;
-    forn(i, 0, k)
+
+    // forn(i, 0, n + 1)
+    // {
+    //     forn(j, 0, n + 1)
+    //     {
+    //         cout << dp[i][j] << " ";
+    //     }
+    //     cout << ln;
+    // }
+    int ans = 0;
+    forn(i, 0, n)
     {
-        if (v[i] == 0)
+        forn(j, i, n)
         {
-            c = 'a' + i;
-            break;
+            int len = (j - i + 1);
+            if (len % 2 == 0)
+            {
+                int j1 = i + len / 2;
+                if (dp[i][j1] >= len / 2)
+                {
+                    ans = max(ans, len);
+                }
+            }
         }
     }
-    while (ifnot.size() < n)
-    {
-        ifnot += c;
-    }
-    cout << ifnot << ln;
+    cout << ans << ln;
 }
 
 signed main()
@@ -200,3 +198,4 @@ signed main()
     }
     return 0;
 }
+

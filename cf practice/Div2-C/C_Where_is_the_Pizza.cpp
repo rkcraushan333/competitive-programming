@@ -113,75 +113,76 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
-bool f(string &s, string &t)
+vector<int> par;
+vector<int> Size;
+int find_Set(int v)
 {
-    int i = 0, j = 0, n = s.size(), m = t.size();
-    while (i < n && j < m)
+    if (par[v] == v)
     {
-        if (s[i] == t[j])
-        {
-            i++;
-            j++;
-        }
-        else
-        {
-            i++;
-        }
+        return v;
     }
-    return j == m;
+    return par[v] = find_Set(par[v]);
+    // return par[v] = (par[v] == v) ? v : find_Set(par[v]);
 }
-
+void union_Set(int u, int v)
+{
+    u = find_Set(u);
+    v = find_Set(v);
+    if (u != v)
+    {
+        if (Size[u] < Size[v])
+            swap(u, v);
+        par[v] = u;
+        Size[u] += Size[v];
+    }
+}
 void inforkc()
 {
-    // ans should be in the form of => {a,b,c...k terms in random order}.... upto n terms
-    int n, k, m;
-    string s;
-    cin >> n >> k >> m >> s;
-    v64 v(26);
+    int n;
+    cin >> n;
+    v64 a(n), b(n), c(n);
+    forn(i, 0, n)
+    {
+        cin >> a[i];
+    }
+    forn(i, 0, n)
+    {
+        cin >> b[i];
+    }
+    vector<int> p(n + 1), s(n + 1, 1);
+    forn(i, 1, n + 1)
+    {
+        p[i] = i;
+    }
+    par = p;
+    Size = s;
+    set<int> st;
+    forn(i, 0, n)
+    {
+        cin >> c[i];
+        if (c[i] != 0)
+        {
+            st.insert(c[i]);
+        }
+        union_Set(a[i], b[i]);
+    }
+
+    forn(i, 0, n)
+    {
+        if (c[i] != 0)
+        {
+            Size[find_Set(c[i])] = 1;
+        }
+    }
     int cnt = 0;
-    string ifnot = "";
-    forn(i, 0, m)
+    forn(i, 1, n + 1)
     {
-        v[s[i] - 'a']++;
-        bool ok = 1;
-        forn(j, 0, k)
+        if (par[i] == i && Size[i] > 1)
         {
-            if (v[j] == 0)
-            {
-                ok = 0;
-                break;
-            }
-        }
-        if (ok)
-        {
-            ifnot += s[i];
             cnt++;
-            if (cnt == n)
-            {
-                yy;
-                return;
-            }
-            forn(j, 0, k)
-            {
-                v[j] = 0;
-            }
         }
     }
-    nn;
-    char c;
-    forn(i, 0, k)
-    {
-        if (v[i] == 0)
-        {
-            c = 'a' + i;
-            break;
-        }
-    }
-    while (ifnot.size() < n)
-    {
-        ifnot += c;
-    }
-    cout << ifnot << ln;
+    cout << fastexpo(2, cnt, mod) << ln;
 }
 
 signed main()

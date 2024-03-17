@@ -113,75 +113,39 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
-bool f(string &s, string &t)
-{
-    int i = 0, j = 0, n = s.size(), m = t.size();
-    while (i < n && j < m)
-    {
-        if (s[i] == t[j])
-        {
-            i++;
-            j++;
-        }
-        else
-        {
-            i++;
-        }
-    }
-    return j == m;
-}
-
 void inforkc()
 {
-    // ans should be in the form of => {a,b,c...k terms in random order}.... upto n terms
-    int n, k, m;
-    string s;
-    cin >> n >> k >> m >> s;
-    v64 v(26);
-    int cnt = 0;
-    string ifnot = "";
-    forn(i, 0, m)
+    int n, k;
+    cin >> n >> k;
+    v64 v(n);
+    forn(i, 0, n)
     {
-        v[s[i] - 'a']++;
-        bool ok = 1;
-        forn(j, 0, k)
-        {
-            if (v[j] == 0)
-            {
-                ok = 0;
-                break;
-            }
-        }
-        if (ok)
-        {
-            ifnot += s[i];
-            cnt++;
-            if (cnt == n)
-            {
-                yy;
-                return;
-            }
-            forn(j, 0, k)
-            {
-                v[j] = 0;
-            }
-        }
+        cin >> v[i];
     }
-    nn;
-    char c;
-    forn(i, 0, k)
+    int l = v[0], r = v[0] + k;
+    for (int i = 1; i < n - 1; i++)
     {
-        if (v[i] == 0)
+        int l1 = v[i], r1 = v[i] + 2 * k - 1;
+        l1 = max(l1, l - (k - 1));
+        r1 = min(r + k - 1, r1);
+        if (l1 >= r || r1 <= l)
         {
-            c = 'a' + i;
-            break;
+            nn;
+            return;
         }
+        l = l1;
+        r = r1;
+        // cout << l << " " << r << endl;
     }
-    while (ifnot.size() < n)
+    int l1 = v[n - 1], r1 = v[n - 1] + k;
+    if (l1 >= r || r1 <= l)
     {
-        ifnot += c;
+        nn;
     }
-    cout << ifnot << ln;
+    else
+    {
+        yy;
+    }
 }
 
 signed main()

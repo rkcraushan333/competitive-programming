@@ -113,75 +113,50 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
-bool f(string &s, string &t)
-{
-    int i = 0, j = 0, n = s.size(), m = t.size();
-    while (i < n && j < m)
-    {
-        if (s[i] == t[j])
-        {
-            i++;
-            j++;
-        }
-        else
-        {
-            i++;
-        }
-    }
-    return j == m;
-}
-
 void inforkc()
 {
-    // ans should be in the form of => {a,b,c...k terms in random order}.... upto n terms
-    int n, k, m;
+    int n;
     string s;
-    cin >> n >> k >> m >> s;
-    v64 v(26);
-    int cnt = 0;
-    string ifnot = "";
-    forn(i, 0, m)
+    cin >> s;
+    n = s.size();
+    map<char, pair<int, int>> mp;
+    mp['L'] = {-1, 0};
+    mp['R'] = {1, 0};
+    mp['U'] = {0, 1};
+    mp['D'] = {0, -1};
+
+    set<pair<int, int>> st;
+    int x = 0, y = 0;
+
+    for (int i = 0; i < n; i++)
     {
-        v[s[i] - 'a']++;
-        bool ok = 1;
-        forn(j, 0, k)
-        {
-            if (v[j] == 0)
-            {
-                ok = 0;
-                break;
-            }
-        }
-        if (ok)
-        {
-            ifnot += s[i];
-            cnt++;
-            if (cnt == n)
-            {
-                yy;
-                return;
-            }
-            forn(j, 0, k)
-            {
-                v[j] = 0;
-            }
-        }
+        x += mp[s[i]].first;
+        y += mp[s[i]].second;
+        if (x == 0 && y == 0)
+            continue;
+        st.insert({x, y});
     }
-    nn;
-    char c;
-    forn(i, 0, k)
+    for (auto x1 : st)
     {
-        if (v[i] == 0)
+        int a = x1.first, b = x1.second;
+        x = 0, y = 0;
+        for (char c : s)
         {
-            c = 'a' + i;
-            break;
+            int r1 = x + mp[c].first, r2 = y + mp[c].second;
+            if (r1 == a && r2 == b)
+            {
+                continue;
+            }
+            x = r1;
+            y = r2;
+        }
+        if (x == 0 && y == 0)
+        {
+            cout << a << " " << b << ln;
+            return;
         }
     }
-    while (ifnot.size() < n)
-    {
-        ifnot += c;
-    }
-    cout << ifnot << ln;
+    cout << 0 << " " << 0 << ln;
 }
 
 signed main()

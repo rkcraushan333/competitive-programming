@@ -113,75 +113,37 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
-bool f(string &s, string &t)
-{
-    int i = 0, j = 0, n = s.size(), m = t.size();
-    while (i < n && j < m)
-    {
-        if (s[i] == t[j])
-        {
-            i++;
-            j++;
-        }
-        else
-        {
-            i++;
-        }
-    }
-    return j == m;
-}
-
 void inforkc()
 {
-    // ans should be in the form of => {a,b,c...k terms in random order}.... upto n terms
-    int n, k, m;
+    int n, c, q;
     string s;
-    cin >> n >> k >> m >> s;
-    v64 v(26);
-    int cnt = 0;
-    string ifnot = "";
-    forn(i, 0, m)
+    cin >> n >> c >> q >> s;
+
+    v64 v;
+    vp64 v1;
+
+    int last = n;
+
+    forn(i, 0, c)
     {
-        v[s[i] - 'a']++;
-        bool ok = 1;
-        forn(j, 0, k)
-        {
-            if (v[j] == 0)
-            {
-                ok = 0;
-                break;
-            }
-        }
-        if (ok)
-        {
-            ifnot += s[i];
-            cnt++;
-            if (cnt == n)
-            {
-                yy;
-                return;
-            }
-            forn(j, 0, k)
-            {
-                v[j] = 0;
-            }
-        }
+        int a, b;
+        cin >> a >> b;
+        v1.push_back({a, b});
+        last += b - a + 1;
+        v.push_back(last);
     }
-    nn;
-    char c;
-    forn(i, 0, k)
+
+    while (q--)
     {
-        if (v[i] == 0)
+        int c;
+        cin >> c;
+        while (c > n)
         {
-            c = 'a' + i;
-            break;
+            int t = lower_bound(v.begin(), v.end(), c) - v.begin();
+            c = v1[t].second - (v[t] - c);
         }
+        cout << s[c - 1] << ln;
     }
-    while (ifnot.size() < n)
-    {
-        ifnot += c;
-    }
-    cout << ifnot << ln;
 }
 
 signed main()

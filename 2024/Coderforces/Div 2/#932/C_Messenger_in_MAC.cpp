@@ -113,75 +113,38 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
-bool f(string &s, string &t)
-{
-    int i = 0, j = 0, n = s.size(), m = t.size();
-    while (i < n && j < m)
-    {
-        if (s[i] == t[j])
-        {
-            i++;
-            j++;
-        }
-        else
-        {
-            i++;
-        }
-    }
-    return j == m;
-}
-
 void inforkc()
 {
-    // ans should be in the form of => {a,b,c...k terms in random order}.... upto n terms
-    int n, k, m;
-    string s;
-    cin >> n >> k >> m >> s;
-    v64 v(26);
-    int cnt = 0;
-    string ifnot = "";
-    forn(i, 0, m)
+    int n, t;
+    cin >> n >> t;
+    vp64 v;
+    forn(i, 0, n)
     {
-        v[s[i] - 'a']++;
-        bool ok = 1;
-        forn(j, 0, k)
+        int a, b;
+        cin >> a >> b;
+        v.push_back({a, b});
+    }
+    sort(v.begin(), v.end(), [](pair<int, int> &a, pair<int, int> &b)
+         { return a.second < b.second; });
+    int ans = 0;
+    forn(i, 0, n)
+    {
+        pqmax pq;
+        int sum = 0;
+        forn(j, i, n)
         {
-            if (v[j] == 0)
+            pq.push(v[j].first);
+            sum += v[j].first;
+            while (pq.size() && sum + abs(v[j].second - v[i].second) > t)
             {
-                ok = 0;
-                break;
+                sum -= pq.top();
+                pq.pop();
             }
-        }
-        if (ok)
-        {
-            ifnot += s[i];
-            cnt++;
-            if (cnt == n)
-            {
-                yy;
-                return;
-            }
-            forn(j, 0, k)
-            {
-                v[j] = 0;
-            }
+            if (ans < pq.size())
+                ans = pq.size();
         }
     }
-    nn;
-    char c;
-    forn(i, 0, k)
-    {
-        if (v[i] == 0)
-        {
-            c = 'a' + i;
-            break;
-        }
-    }
-    while (ifnot.size() < n)
-    {
-        ifnot += c;
-    }
-    cout << ifnot << ln;
+    cout << ans << ln;
 }
 
 signed main()

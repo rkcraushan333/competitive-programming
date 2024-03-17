@@ -113,75 +113,34 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
-bool f(string &s, string &t)
-{
-    int i = 0, j = 0, n = s.size(), m = t.size();
-    while (i < n && j < m)
-    {
-        if (s[i] == t[j])
-        {
-            i++;
-            j++;
-        }
-        else
-        {
-            i++;
-        }
-    }
-    return j == m;
-}
-
 void inforkc()
 {
-    // ans should be in the form of => {a,b,c...k terms in random order}.... upto n terms
-    int n, k, m;
-    string s;
-    cin >> n >> k >> m >> s;
-    v64 v(26);
-    int cnt = 0;
-    string ifnot = "";
-    forn(i, 0, m)
+    int n, k;
+    cin >> n >> k;
+    v64 v(n);
+    map<int, int> mp;
+    forn(i, 0, n)
     {
-        v[s[i] - 'a']++;
-        bool ok = 1;
-        forn(j, 0, k)
-        {
-            if (v[j] == 0)
-            {
-                ok = 0;
-                break;
-            }
-        }
-        if (ok)
-        {
-            ifnot += s[i];
-            cnt++;
-            if (cnt == n)
-            {
-                yy;
-                return;
-            }
-            forn(j, 0, k)
-            {
-                v[j] = 0;
-            }
-        }
+        cin >> v[i];
+        mp[v[i]]++;
     }
-    nn;
-    char c;
-    forn(i, 0, k)
+    sort(v.rbegin(), v.rend());
+    int x = v[k - 1];
+    int t = k, cnt = 0;
+    while (t < n && v[t] == x)
     {
-        if (v[i] == 0)
-        {
-            c = 'a' + i;
-            break;
-        }
+        cnt++;
+        t++;
     }
-    while (ifnot.size() < n)
+    if (cnt == 0)
     {
-        ifnot += c;
+        cout << 1 << ln;
     }
-    cout << ifnot << ln;
+    else
+    {
+        int req = mp[x] - cnt;
+        cout << ncr(mp[x], req) << ln;
+    }
 }
 
 signed main()
@@ -191,7 +150,7 @@ signed main()
     //  freopen("input.txt", "r", stdin);
     // freopen("output.txt", "w", stdout);
     // sieve();
-    // factorial();
+    factorial();
     int t_e_s_t = 1;
     cin >> t_e_s_t;
     while (t_e_s_t--)

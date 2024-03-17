@@ -113,75 +113,57 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
-bool f(string &s, string &t)
+int dx[4] = {0, 1, -1, 0};
+int dy[4] = {1, 0, 0, -1};
+bool f(vector<string> &v, set<v64> &st, int i = 0, int j = 0, bool b = 0)
 {
-    int i = 0, j = 0, n = s.size(), m = t.size();
-    while (i < n && j < m)
+    int m = v[0].size();
+    if (i < 0 || j < 0 || i >= 2 || j >= m || st.count({i, j, b}))
     {
-        if (s[i] == t[j])
+        return false;
+    }
+    if (i == 1 && j == m - 1)
+    {
+        return true;
+    }
+    bool ans = 0;
+    st.insert({i, j, b});
+    if (b == 0)
+    {
+        forn(k, 0, 4)
         {
-            i++;
-            j++;
+            ans |= f(v, st, i + dx[k], j + dy[k], 1);
+        }
+    }
+    else
+    {
+        if (v[i][j] == '<')
+        {
+            ans |= f(v, st, i, j - 1, 0);
         }
         else
         {
-            i++;
+            ans |= f(v, st, i, j + 1, 0);
         }
     }
-    return j == m;
+    return ans;
 }
-
 void inforkc()
 {
-    // ans should be in the form of => {a,b,c...k terms in random order}.... upto n terms
-    int n, k, m;
-    string s;
-    cin >> n >> k >> m >> s;
-    v64 v(26);
-    int cnt = 0;
-    string ifnot = "";
-    forn(i, 0, m)
+    int n;
+    cin >> n;
+    vector<string> v;
+    forn(i, 0, 2)
     {
-        v[s[i] - 'a']++;
-        bool ok = 1;
-        forn(j, 0, k)
-        {
-            if (v[j] == 0)
-            {
-                ok = 0;
-                break;
-            }
-        }
-        if (ok)
-        {
-            ifnot += s[i];
-            cnt++;
-            if (cnt == n)
-            {
-                yy;
-                return;
-            }
-            forn(j, 0, k)
-            {
-                v[j] = 0;
-            }
-        }
+        string s;
+        cin >> s;
+        v.push_back(s);
     }
-    nn;
-    char c;
-    forn(i, 0, k)
-    {
-        if (v[i] == 0)
-        {
-            c = 'a' + i;
-            break;
-        }
-    }
-    while (ifnot.size() < n)
-    {
-        ifnot += c;
-    }
-    cout << ifnot << ln;
+    set<v64> st;
+    if (f(v, st))
+        yy;
+    else
+        nn;
 }
 
 signed main()
