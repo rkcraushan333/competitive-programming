@@ -119,7 +119,6 @@ int f(v64 &v1, v64 &v2, v64 &v3, v64 &dp, int i = 0)
     {
         return 0;
     }
-
     int &rkc = dp[i];
     if (rkc != -1)
         return rkc;
@@ -145,12 +144,16 @@ void inforkc()
         cin >> a >> b;
         v.push_back({a, b});
     }
-    sort(v.begin(), v.end());
+    sort(v.begin(), v.end(), [](pair<int, int> &a, pair<int, int> &b)
+         {
+        if(a.first==b.first) return a.second < b.second;
+        return a.first < b.first; });
     v64 v1, v2, v3(m);
     for (auto i : v)
     {
         v1.push_back(i.first);
         v2.push_back(i.second);
+        cout << i.first << " " << i.second << endl;
     }
     v3 = v2;
     for (int i = 1; i < m; i++)
