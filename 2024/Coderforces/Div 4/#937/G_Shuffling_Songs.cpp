@@ -13,7 +13,7 @@ using namespace __gnu_pbds;
 #define yy cout << "Yes" << ln
 #define nn cout << "No" << ln
 #define pi 3.14159265358979323846
-const int mod = 1e9 + 7;
+const int mod = 1011001110001111;
 #define dbg cout << "debug" << ln;
 tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics_node_update> T;
 // Ordered set functions user less_equal for multiset
@@ -112,7 +112,19 @@ int ncr(int n, int r)
 
 // for inverse modulo (k^mod-2)%mod
 // by inforkc => don't use hashing in codeforces instead use set and map
-
+int stringVal(string &s)
+{
+    int val = 0, pw = 1, n = s.size();
+    for (int i = 0; i < n; i++)
+    {
+        int a = s[i] - 'a' + 1;
+        val += (a * pw);
+        val %= mod;
+        pw *= 31;
+        pw %= mod;
+    }
+    return val;
+}
 int f(vp64 &v, vector<v64> &dp, int last = -1, int mask = 0)
 {
     if (dp[last + 1][mask] != -1)
@@ -158,23 +170,12 @@ void inforkc()
     int n;
     cin >> n;
     vp64 v;
-    int cnt = 0;
-    map<string, int> mp;
     forn(i, 0, n)
     {
         string s, t;
         cin >> s >> t;
-        int a, b;
-        if (!mp.count(s))
-        {
-            mp[s] = cnt++;
-        }
-        if (!mp.count(t))
-        {
-            mp[t] = cnt++;
-        }
-        a = mp[s];
-        b = mp[t];
+        int a = stringVal(s);
+        int b = stringVal(t);
         v.push_back({a, b});
     }
     vector<v64> dp(n + 2, v64(1 << v.size(), -1));

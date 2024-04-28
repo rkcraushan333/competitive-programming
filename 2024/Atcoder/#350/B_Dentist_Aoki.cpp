@@ -111,71 +111,36 @@ int ncr(int n, int r)
 }
 
 // for inverse modulo (k^mod-2)%mod
-// by inforkc => don't use hashing in codeforces instead use set and map
+// by inforkc => don't use hashing instead use set and map
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
-    unordered_map<int, set<int>> adj;
-    v64 indegree(n + 1);
-    forn(i, 0, k)
+    int n, q;
+    cin >> n >> q;
+    v64 v(n + 1, 1);
+    v[0] = 0;
+    while (q--)
     {
-        v64 v(n);
-        forn(j, 0, n)
-        {
-            cin >> v[j];
-        }
-        for (int i = 2; i < n; i++)
-        {
-            if (adj[v[i - 1]].count(v[i]) == 0)
-            {
-                indegree[v[i]]++;
-                adj[v[i - 1]].insert(v[i]);
-            }
-        }
+        int x;
+        cin >> x;
+        v[x] ^= 1;
     }
-    queue<int> q;
+    int ans = 0;
     for (int i = 1; i <= n; i++)
     {
-        if (indegree[i] == 0)
-        {
-            q.push(i);
-        }
+        ans += v[i];
     }
-
-    int cnt = 0;
-    while (q.size())
-    {
-        int t = q.front();
-        q.pop();
-        cnt++;
-        for (int child : adj[t])
-        {
-            indegree[child]--;
-            if (indegree[child] == 0)
-            {
-                q.push(child);
-            }
-        }
-    }
-    // cout << cnt << ln;
-    if (cnt == n)
-        cout << "YES";
-    else
-        cout << "NO";
-    cout << ln;
+    cout << ans << ln;
 }
 
 signed main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    //  freopen("input.txt", "r", stdin);
-    // freopen("output.txt", "w", stdout);
+    //  freopen("filename.in", "r", stdin);
+    // freopen("filename.out", "w", stdout);
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

@@ -41,37 +41,6 @@ int power10(int n)
     }
     return pows[n];
 }
-vector<int> prime;
-void sieve()
-{
-    prime.resize(1e6 + 1);
-    for (int i = 0; i < prime.size(); i++)
-    {
-        prime[i] = i;
-    }
-    for (int i = 2; i <= 1e6; i++)
-    {
-        if (prime[i] == i)
-        {
-            for (int j = 2 * i; j <= 1e6; j += i)
-            {
-                prime[j] = i;
-            }
-        }
-    }
-}
-v64 primefac(int n)
-{
-    v64 res;
-    while (n != prime[n])
-    {
-        res.push_back(prime[n]);
-        n /= prime[n];
-    }
-    if (n != 1)
-        res.push_back(n);
-    return res;
-}
 int fastexpo(int a, int b, int m)
 {
     a %= m;
@@ -111,71 +80,82 @@ int ncr(int n, int r)
 }
 
 // for inverse modulo (k^mod-2)%mod
-// by inforkc => don't use hashing in codeforces instead use set and map
+// by inforkc => don't use hashing instead use set and map
 void inforkc()
 {
     int n, k;
     cin >> n >> k;
-    unordered_map<int, set<int>> adj;
-    v64 indegree(n + 1);
-    forn(i, 0, k)
+    multiset<int> s1, s2;
+    int i = 0, j = 0;
+    v64 v(n);
+    while (j < n)
     {
-        v64 v(n);
-        forn(j, 0, n)
+        int x;
+        cin >> x;
+        v[j] = x;
+        int len=k/2;
+        if(k%2!=0)
         {
-            cin >> v[j];
+            len++;
         }
-        for (int i = 2; i < n; i++)
+        int l1=s1.size();
+        int l2=s2.size();
+        if (l1 < len)
         {
-            if (adj[v[i - 1]].count(v[i]) == 0)
+            s1.insert(x);
+        }
+        else if (l1+l2 < k)
+        {
+            if (*s1.rbegin() > x)
             {
-                indegree[v[i]]++;
-                adj[v[i - 1]].insert(v[i]);
+                s2.insert(*s1.rbegin());
+                s1.erase(s1.find(*s1.rbegin()));
+                s1.insert(x);
+            }
+            else
+            {
+                s2.insert(x);
             }
         }
-    }
-    queue<int> q;
-    for (int i = 1; i <= n; i++)
-    {
-        if (indegree[i] == 0)
+        else
         {
-            q.push(i);
-        }
-    }
-
-    int cnt = 0;
-    while (q.size())
-    {
-        int t = q.front();
-        q.pop();
-        cnt++;
-        for (int child : adj[t])
-        {
-            indegree[child]--;
-            if (indegree[child] == 0)
+            cout << *s1.rbegin() << " ";
+            if (s1.count(v[i]))
             {
-                q.push(child);
+                s1.erase(s1.find(v[i]));
+                s1.insert(*s2.begin());
+                s2.erase(s2.find(*s2.begin()));
             }
+            else
+            {
+                s2.erase(s2.find(v[i]));
+            }
+            if (*s1.rbegin() > x)
+            {
+                s2.insert(*s1.rbegin());
+                s1.erase(s1.find(*s1.rbegin()));
+                s1.insert(x);
+            }
+            else
+            {
+                s2.insert(x);
+            }
+            i++;
         }
+        j++;
     }
-    // cout << cnt << ln;
-    if (cnt == n)
-        cout << "YES";
-    else
-        cout << "NO";
-    cout << ln;
+    cout << *s1.rbegin() <<" ";
 }
 
 signed main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    //  freopen("input.txt", "r", stdin);
-    // freopen("output.txt", "w", stdout);
+    //  freopen("filename.in", "r", stdin);
+    // freopen("filename.out", "w", stdout);
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

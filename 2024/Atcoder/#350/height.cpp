@@ -111,71 +111,85 @@ int ncr(int n, int r)
 }
 
 // for inverse modulo (k^mod-2)%mod
-// by inforkc => don't use hashing in codeforces instead use set and map
+// by inforkc => don't use hashing instead use set and map
+int solve(v64 &v)
+{
+    int n = v.size();
+    stack<int> st;
+    vector<int> l(n), r(n);
+    for (int i = n - 1; i >= 0; i--)
+    {
+        while (st.size() && v[st.top()] <= v[i])
+        {
+            st.pop();
+        }
+        if (st.size() == 0)
+        {
+            r[i] = n;
+        }
+        else
+        {
+            r[i] = st.top();
+        }
+        st.push(i);
+    }
+    while (!st.empty())
+    {
+        st.pop();
+    }
+    forn(i, 0, n)
+    {
+        while (st.size() && v[st.top()] <= v[i])
+        {
+            st.pop();
+        }
+        if (st.size() == 0)
+        {
+            l[i] = -1;
+        }
+        else
+        {
+            l[i] = st.top();
+        }
+        st.push(i);
+    }
+    int ans = 0;
+    for (int i = 0; i < n; i++)
+    {
+        int a, b;
+        if (l[i] == i)
+            a = i;
+        else
+            a = l[i] + 1;
+        if (r[i] == i)
+            b = i;
+        else
+            b = r[i] - 1;
+        ans += (b - a + 1);
+    }
+    return ans;
+}
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
-    unordered_map<int, set<int>> adj;
-    v64 indegree(n + 1);
-    forn(i, 0, k)
+    int n;
+    cin >> n;
+    v64 v(n);
+    forn(i, 0, n)
     {
-        v64 v(n);
-        forn(j, 0, n)
-        {
-            cin >> v[j];
-        }
-        for (int i = 2; i < n; i++)
-        {
-            if (adj[v[i - 1]].count(v[i]) == 0)
-            {
-                indegree[v[i]]++;
-                adj[v[i - 1]].insert(v[i]);
-            }
-        }
+        cin >> v[i];
     }
-    queue<int> q;
-    for (int i = 1; i <= n; i++)
-    {
-        if (indegree[i] == 0)
-        {
-            q.push(i);
-        }
-    }
-
-    int cnt = 0;
-    while (q.size())
-    {
-        int t = q.front();
-        q.pop();
-        cnt++;
-        for (int child : adj[t])
-        {
-            indegree[child]--;
-            if (indegree[child] == 0)
-            {
-                q.push(child);
-            }
-        }
-    }
-    // cout << cnt << ln;
-    if (cnt == n)
-        cout << "YES";
-    else
-        cout << "NO";
-    cout << ln;
+    cout << solve(v);
 }
 
 signed main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    //  freopen("input.txt", "r", stdin);
-    // freopen("output.txt", "w", stdout);
+    //  freopen("filename.in", "r", stdin);
+    // freopen("filename.out", "w", stdout);
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

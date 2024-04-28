@@ -111,71 +111,43 @@ int ncr(int n, int r)
 }
 
 // for inverse modulo (k^mod-2)%mod
-// by inforkc => don't use hashing in codeforces instead use set and map
+// by inforkc => don't use hashing instead use set and map
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
-    unordered_map<int, set<int>> adj;
-    v64 indegree(n + 1);
-    forn(i, 0, k)
+    string s;
+    cin >> s;
+    string t = "";
+    for (int i = 0; i < 3; i++)
     {
-        v64 v(n);
-        forn(j, 0, n)
-        {
-            cin >> v[j];
-        }
-        for (int i = 2; i < n; i++)
-        {
-            if (adj[v[i - 1]].count(v[i]) == 0)
-            {
-                indegree[v[i]]++;
-                adj[v[i - 1]].insert(v[i]);
-            }
-        }
+        t += s[i];
     }
-    queue<int> q;
-    for (int i = 1; i <= n; i++)
+    if (t != "ABC")
     {
-        if (indegree[i] == 0)
-        {
-            q.push(i);
-        }
+        nn;
+        return;
     }
-
-    int cnt = 0;
-    while (q.size())
+    t = "";
+    for (int i = 3; i < 6; i++)
     {
-        int t = q.front();
-        q.pop();
-        cnt++;
-        for (int child : adj[t])
-        {
-            indegree[child]--;
-            if (indegree[child] == 0)
-            {
-                q.push(child);
-            }
-        }
+        t += s[i];
     }
-    // cout << cnt << ln;
-    if (cnt == n)
-        cout << "YES";
-    else
-        cout << "NO";
-    cout << ln;
+    int x = stoi(t);
+    if (x == 0 || x == 316 || x > 349)
+    {
+        nn;
+        return;
+    }
+    yy;
 }
-
 signed main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    //  freopen("input.txt", "r", stdin);
-    // freopen("output.txt", "w", stdout);
+    //  freopen("filename.in", "r", stdin);
+    // freopen("filename.out", "w", stdout);
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

@@ -111,71 +111,61 @@ int ncr(int n, int r)
 }
 
 // for inverse modulo (k^mod-2)%mod
-// by inforkc => don't use hashing in codeforces instead use set and map
+// by inforkc => don't use hashing instead use set and map
+vector<v64> adj;
+vector<int> ans;
+unordered_set<int> vis;
+v64 par;
+int xx;
+bool dfs(int s, int par = -1)
+{
+    vis.insert(s);
+    ans.push_back(s);
+    for (int child : adj[s])
+    {
+        if (!vis.count(child))
+        {
+            dfs(child, s);
+            par[child] = s;
+        }
+        else if (child != par)
+        {
+            xx = s;
+            return true;
+        }
+    }
+}
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
-    unordered_map<int, set<int>> adj;
-    v64 indegree(n + 1);
-    forn(i, 0, k)
+    int n, m;
+    cin >> n >> m;
+    par.resize(n + 1);
+    adj.resize(n + 1);
+    forn(i, 0, m)
     {
-        v64 v(n);
-        forn(j, 0, n)
+        int a, b;
+        cin >> a >> b;
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+    }
+    forn(i, 1, n + 1)
+    {
+        if (!vis.count(i))
         {
-            cin >> v[j];
-        }
-        for (int i = 2; i < n; i++)
-        {
-            if (adj[v[i - 1]].count(v[i]) == 0)
-            {
-                indegree[v[i]]++;
-                adj[v[i - 1]].insert(v[i]);
-            }
+            dfs(i);
         }
     }
-    queue<int> q;
-    for (int i = 1; i <= n; i++)
-    {
-        if (indegree[i] == 0)
-        {
-            q.push(i);
-        }
-    }
-
-    int cnt = 0;
-    while (q.size())
-    {
-        int t = q.front();
-        q.pop();
-        cnt++;
-        for (int child : adj[t])
-        {
-            indegree[child]--;
-            if (indegree[child] == 0)
-            {
-                q.push(child);
-            }
-        }
-    }
-    // cout << cnt << ln;
-    if (cnt == n)
-        cout << "YES";
-    else
-        cout << "NO";
-    cout << ln;
 }
 
 signed main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    //  freopen("input.txt", "r", stdin);
-    // freopen("output.txt", "w", stdout);
+    //  freopen("filename.in", "r", stdin);
+    // freopen("filename.out", "w", stdout);
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

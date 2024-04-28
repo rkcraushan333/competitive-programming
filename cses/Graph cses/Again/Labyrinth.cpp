@@ -111,71 +111,97 @@ int ncr(int n, int r)
 }
 
 // for inverse modulo (k^mod-2)%mod
-// by inforkc => don't use hashing in codeforces instead use set and map
+// by inforkc => don't use hashing instead use set and map
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
-    unordered_map<int, set<int>> adj;
-    v64 indegree(n + 1);
-    forn(i, 0, k)
+    int n, m;
+    cin >> n >> m;
+    vector<vector<char>> v(n, vector<char>(m));
+    vector<vp64> par(n, vp64(m));
+    queue<pair<int, int>> q;
+    pair<int, int> d;
+    forn(i, 0, n)
     {
-        v64 v(n);
-        forn(j, 0, n)
+        forn(j, 0, m)
         {
-            cin >> v[j];
-        }
-        for (int i = 2; i < n; i++)
-        {
-            if (adj[v[i - 1]].count(v[i]) == 0)
+            cin >> v[i][j];
+            if (v[i][j] == 'A')
             {
-                indegree[v[i]]++;
-                adj[v[i - 1]].insert(v[i]);
+                q.push({i, j});
+                par[i][j] = {i, j};
+                v[i][j] = '#';
+                // cout << i << " " << j << endl;
             }
+            else if (v[i][j] == 'B')
+                d = {i, j};
         }
     }
-    queue<int> q;
-    for (int i = 1; i <= n; i++)
-    {
-        if (indegree[i] == 0)
-        {
-            q.push(i);
-        }
-    }
+    int dx[4] = {0, 0, 1, -1};
+    int dy[4] = {1, -1, 0, 0};
+    bool ok = 0;
 
-    int cnt = 0;
-    while (q.size())
+    while (!q.empty())
     {
-        int t = q.front();
+        auto p = q.front();
         q.pop();
-        cnt++;
-        for (int child : adj[t])
+        if (p == d)
         {
-            indegree[child]--;
-            if (indegree[child] == 0)
-            {
-                q.push(child);
-            }
+            ok = 1;
+            break;
+        }
+        forn(k, 0, 4)
+        {
+            int r = p.first + dx[k], c = p.second + dy[k];
+            if (r < 0 || c < 0 || r == n || c == m || v[r][c] == '#')
+                continue;
+            v[r][c] = '#';
+            q.push({r, c});
+            par[r][c] = p;
         }
     }
-    // cout << cnt << ln;
-    if (cnt == n)
-        cout << "YES";
-    else
+    if (!ok)
+    {
         cout << "NO";
-    cout << ln;
+        return;
+    }
+    map<pair<int, int>, char> mp;
+    mp[{0, 1}] = 'R';
+    mp[{0, -1}] = 'L';
+    mp[{1, 0}] = 'D';
+    mp[{-1, 0}] = 'U';
+
+    cout << "YES" << ln;
+    string ans = "";
+    int x = d.first, y = d.second;
+    while (par[x][y] != make_pair(x, y))
+    {
+        d = par[x][y];
+        ans += mp[{x - d.first, y - d.second}];
+        x = d.first, y = d.second;
+    }
+    // forn(i, 0, n)
+    // {
+    //     forn(j, 0, m)
+    //     {
+    //         cout << par[i][j].first << "," << par[i][j].second << " ";
+    //     }
+    //     cout << ln;
+    // }
+
+    reverse(ans.begin(), ans.end());
+    cout << ans.size() << ln;
+    cout << ans << ln;
 }
 
 signed main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    //  freopen("input.txt", "r", stdin);
-    // freopen("output.txt", "w", stdout);
+    //  freopen("filename.in", "r", stdin);
+    // freopen("filename.out", "w", stdout);
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();

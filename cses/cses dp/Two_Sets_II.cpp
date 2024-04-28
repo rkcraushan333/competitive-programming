@@ -111,71 +111,63 @@ int ncr(int n, int r)
 }
 
 // for inverse modulo (k^mod-2)%mod
-// by inforkc => don't use hashing in codeforces instead use set and map
+// by inforkc => don't use hashing instead use set and map
+int f(int n, vector<v64> &dp, int i, int sum)
+{
+    if (sum == 0)
+        return 1;
+    if (sum < i || i > n)
+        return 0;
+
+    int &t = dp[i][sum];
+    if (t != -1)
+        return t;
+
+    int ans = 0;
+    ans += f(n, dp, i + 1, sum - i);
+    ans %= mod;
+    ans += f(n, dp, i + 1,sum);
+    ans %= mod;
+    return t = ans;
+}
 void inforkc()
 {
-    int n, k;
-    cin >> n >> k;
-    unordered_map<int, set<int>> adj;
-    v64 indegree(n + 1);
-    forn(i, 0, k)
+    int n;
+    cin >> n;
+    int sum = n * (n + 1);
+    if ((sum % 4) != 0)
     {
-        v64 v(n);
-        forn(j, 0, n)
-        {
-            cin >> v[j];
-        }
-        for (int i = 2; i < n; i++)
-        {
-            if (adj[v[i - 1]].count(v[i]) == 0)
-            {
-                indegree[v[i]]++;
-                adj[v[i - 1]].insert(v[i]);
-            }
-        }
+        cout << 0;
+        return;
     }
-    queue<int> q;
-    for (int i = 1; i <= n; i++)
-    {
-        if (indegree[i] == 0)
-        {
-            q.push(i);
-        }
-    }
+    sum /= 4;
 
-    int cnt = 0;
-    while (q.size())
-    {
-        int t = q.front();
-        q.pop();
-        cnt++;
-        for (int child : adj[t])
-        {
-            indegree[child]--;
-            if (indegree[child] == 0)
-            {
-                q.push(child);
-            }
-        }
-    }
-    // cout << cnt << ln;
-    if (cnt == n)
-        cout << "YES";
-    else
-        cout << "NO";
-    cout << ln;
+    vector<v64> dp(n + 1, v64(sum + 1, -1));
+    int val = f(n, dp, 1, sum);
+    int inverse = inv(2);
+    cout << (val * inverse) % mod << ln;
+
+    // sum = {0,125000}
+    // v64 dp(sum + 1);
+    // dp[0] = 1;
+    // for (int i = 1; i <= n; i++)
+    // {
+    //     for (int j = i; j <= sum; j++)
+    //     {
+    //         dp[j] += dp[j - i];
+    //     }
+    // }
 }
 
 signed main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    //  freopen("input.txt", "r", stdin);
-    // freopen("output.txt", "w", stdout);
+    //  freopen("filename.in", "r", stdin);
+    // freopen("filename.out", "w", stdout);
     // sieve();
     // factorial();
     int t_e_s_t = 1;
-    cin >> t_e_s_t;
     while (t_e_s_t--)
     {
         inforkc();
