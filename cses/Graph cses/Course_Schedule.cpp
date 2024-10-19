@@ -121,43 +121,53 @@ void inforkc()
 {
     int n, m;
     cin >> n >> m;
-    vector<v64> adj(n + 1);
-    v64 indeg(n + 1);
+    unordered_map<int, set<int>> adj;
+    v64 indegree(n + 1);
     forn(i, 0, m)
     {
         int a, b;
         cin >> a >> b;
-        adj[a].push_back(b);
-        indeg[b]++;
+        if (adj[a].count(b) == 0)
+        {
+            indegree[b]++;
+            adj[a].insert(b);
+        }
     }
+    v64 topo;
     queue<int> q;
     for (int i = 1; i <= n; i++)
     {
-        if (indeg[i] == 0)
+        if (indegree[i] == 0)
         {
             q.push(i);
         }
     }
-    v64 order;
-    while (!q.empty())
+
+    while (q.size())
     {
         int t = q.front();
         q.pop();
-        order.push_back(t);
-        for (auto j : adj[t])
+        topo.push_back(t);
+        for (int child : adj[t])
         {
-            indeg[j]--;
-            if (indeg[j] == 0)
-                q.push(j);
+            indegree[child]--;
+            if (indegree[child] == 0)
+            {
+                q.push(child);
+            }
         }
     }
-    if (order.size() < n)
+    if (topo.size() != n)
     {
         cout << "IMPOSSIBLE";
-        return;
     }
-    for (auto i : order)
-        cout << i << " ";
+    else
+    {
+        for (auto i : topo)
+        {
+            cout << i << " ";
+        }
+    }
 }
 
 signed main()
